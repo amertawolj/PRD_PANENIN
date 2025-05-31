@@ -17,7 +17,10 @@ dependencies:
   cupertino_icons: ^1.0.8
 
   # Camera for ID verification
-  camera: ^0.10.5+5
+  camera: ^0.10.5+5  # Add this line
+  path_provider: ^2.1.1  # For file management
+  path: ^1.8.3  # For path operations
+
 # Packages Ends
 
 
