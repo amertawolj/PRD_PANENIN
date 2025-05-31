@@ -90,12 +90,21 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
+<<<<<<< HEAD
             VALUE "FileDescription", "prd_tubes" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "prd_tubes" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2025 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "prd_tubes.exe" "\0"
             VALUE "ProductName", "prd_tubes" "\0"
+=======
+            VALUE "FileDescription", "prdpanenin" "\0"
+            VALUE "FileVersion", VERSION_AS_STRING "\0"
+            VALUE "InternalName", "prdpanenin" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2025 com.example. All rights reserved." "\0"
+            VALUE "OriginalFilename", "prdpanenin.exe" "\0"
+            VALUE "ProductName", "prdpanenin" "\0"
+>>>>>>> 48e1fc7aec48cb471c85a28b24d6ef3d728422d7
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

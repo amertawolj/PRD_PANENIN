@@ -6,9 +6,15 @@ plugins {
 }
 
 android {
+<<<<<<< HEAD
     namespace = "com.example.prd_tubes"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
+=======
+    namespace = "com.example.prdpanenin"
+    compileSdk = flutter.compileSdkVersion
+    ndkVersion = flutter.ndkVersion
+>>>>>>> 48e1fc7aec48cb471c85a28b24d6ef3d728422d7
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -21,7 +27,11 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+<<<<<<< HEAD
         applicationId = "com.example.prd_tubes"
+=======
+        applicationId = "com.example.prdpanenin"
+>>>>>>> 48e1fc7aec48cb471c85a28b24d6ef3d728422d7
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion

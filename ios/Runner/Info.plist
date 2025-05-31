@@ -5,7 +5,11 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
+<<<<<<< HEAD
 	<string>Prd Tubes</string>
+=======
+	<string>Prdpanenin</string>
+>>>>>>> 48e1fc7aec48cb471c85a28b24d6ef3d728422d7
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -13,7 +17,11 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
+<<<<<<< HEAD
 	<string>prd_tubes</string>
+=======
+	<string>prdpanenin</string>
+>>>>>>> 48e1fc7aec48cb471c85a28b24d6ef3d728422d7
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

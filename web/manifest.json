@@ -1,11 +1,20 @@
 {
+<<<<<<< HEAD
     "name": "prd_tubes",
     "short_name": "prd_tubes",
+=======
+    "name": "prdpanenin",
+    "short_name": "prdpanenin",
+>>>>>>> 48e1fc7aec48cb471c85a28b24d6ef3d728422d7
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
+<<<<<<< HEAD
     "description": "Panenin v01 App Implementation",
+=======
+    "description": "A new Flutter project.",
+>>>>>>> 48e1fc7aec48cb471c85a28b24d6ef3d728422d7
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

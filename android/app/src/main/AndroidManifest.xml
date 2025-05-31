@@ -1,6 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
+<<<<<<< HEAD
         android:label="prd_tubes"
+=======
+        android:label="prdpanenin"
+>>>>>>> 48e1fc7aec48cb471c85a28b24d6ef3d728422d7
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
