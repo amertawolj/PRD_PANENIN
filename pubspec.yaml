@@ -35,6 +35,8 @@ flutter:
     - assets/image/checkimage.png
     - assets/image/idimage.png
     - assets/image/graphdummy.png
+    - assets/image/Group 35@2x.png
+    - assets/image/logopanenin.png
 
   # Local Font
   fonts:
