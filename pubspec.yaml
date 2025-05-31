@@ -1,0 +1,67 @@
+name: prd_tubes
+description: "Panenin v01 App Implementation"
+
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.2
+
+# Packages
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Icons
+  iconsax: ^0.0.8
+  cupertino_icons: ^1.0.8
+
+  # Camera for ID verification
+  camera: ^0.10.5+5
+# Packages Ends
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  # Local Assets
+  assets:
+    - assets/image/camimage.png
+    - assets/image/checkimage.png
+    - assets/image/idimage.png
+    - assets/image/graphdummy.png
+
+  # Local Font
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/font/Poppins-Bold.ttf
+          weight: 800
+        - asset: assets/font/Poppins-BoldItalic.ttf
+          style: italic
+        - asset: assets/font/Poppins-Italic.ttf
+          style: italic
+        - asset: assets/font/Poppins-Light.ttf
+          weight: 300
+        - asset: assets/font/Poppins-LightItalic.ttf
+          style: italic
+        - asset: assets/font/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/font/Poppins-MediumItalic.ttf
+          style: italic
+        - asset: assets/font/Poppins-Regular.ttf
+          weight: 400
+        - asset: assets/font/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: assets/font/Poppins-SemiBoldItalic.ttf
+          style: italic
+
+    - family: Fredoka
+      fonts:
+        - asset: assets/font/Fredoka-SemiBold.ttf
+          weight: 600
