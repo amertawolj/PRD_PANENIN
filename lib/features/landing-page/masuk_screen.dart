@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prd_tubes/auth/auth_service.dart';
 
 class MasukPage extends StatefulWidget {
   @override
@@ -8,7 +9,53 @@ class MasukPage extends StatefulWidget {
 class _MasukPageState extends State<MasukPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _usernameController = TextEditingController();
   bool _obscurePassword = true;
+
+  final authService = AuthService();
+
+  void login() async {
+    final identifier = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    try {
+      String emailToUse;
+
+      if (identifier.contains('@')) {
+        emailToUse = identifier;
+      } else {
+        final fetchedEmail = await authService.getEmailByUsername(identifier);
+        if (fetchedEmail == null) {
+          throw Exception('Username tidak ditemukan');
+        }
+        emailToUse = fetchedEmail;
+      }
+
+      final authResponse = await authService.signInWithPassword(emailToUse, password);
+
+      final user = authResponse.user;
+      if (user == null) throw Exception("Login gagal");
+
+      // Ambil data profil dari tabel 'profiles'
+      final profile = await authService.getUserProfile(user.id);
+      final displayName = profile?['username'] ?? 'Tanpa Nama';
+
+      // Kirim ke halaman berikutnya atau simpan state-nya
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/homepage', arguments: {
+          'displayName': displayName,
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error: $e")),
+        );
+      }
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -141,9 +188,7 @@ class _MasukPageState extends State<MasukPage> {
                                 Container(
                                   width: double.infinity,
                                   child: ElevatedButton(
-                                    onPressed: () {
-                                      // Handle login
-                                    },
+                                    onPressed: login,
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Color(0xFF2D5016),
                                       padding: EdgeInsets.symmetric(vertical: 16),
@@ -358,6 +403,8 @@ class WavePainter extends CustomPainter {
     canvas.drawPath(path1, paint1);
     canvas.drawPath(path2, paint2);
   }
+
+
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;

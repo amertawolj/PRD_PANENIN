@@ -20,6 +20,7 @@ dependencies:
   camera: ^0.10.5+5  # Add this line
   path_provider: ^2.1.1  # For file management
   path: ^1.8.3  # For path operations
+  supabase_flutter: ^2.9.0
 
 # Packages Ends
 

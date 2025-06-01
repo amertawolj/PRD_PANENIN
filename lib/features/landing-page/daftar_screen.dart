@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prd_tubes/auth/auth_service.dart';
 
 class DaftarPage extends StatefulWidget {
   @override
@@ -12,6 +13,59 @@ class _DaftarPageState extends State<DaftarPage> {
   final _confirmPasswordController = TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+  bool _isLoading = false; // Add loading state
+
+  final authService = AuthService();
+
+  void signUp() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    final username = _usernameController.text.trim();
+    final confirmPassword = _confirmPasswordController.text.trim();
+
+    // Basic validation
+    if (email.isEmpty || password.isEmpty || username.isEmpty || confirmPassword.isEmpty) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Semua field harus diisi")));
+      return;
+    }
+
+    if (password != confirmPassword) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Passwords tidak sama")));
+      return;
+    }
+
+    // Password validation (basic)
+    if (password.length < 8) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Password minimal 8 karakter")));
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await authService.signUp(email, password);
+
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/idverification');
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Error: $e")));
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -148,13 +202,11 @@ class _DaftarPageState extends State<DaftarPage> {
                                 ),
                                 SizedBox(height: 24),
 
-                                // Register button
+                                // Register button - FIXED: Connected to signUp function
                                 Container(
                                   width: double.infinity,
                                   child: ElevatedButton(
-                                    onPressed: () {
-                                      // Handle registration
-                                    },
+                                    onPressed: _isLoading ? null : signUp, // Connect to signUp function
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Color(0xFF2D5016),
                                       padding: EdgeInsets.symmetric(vertical: 16),
@@ -162,7 +214,16 @@ class _DaftarPageState extends State<DaftarPage> {
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                     ),
-                                    child: Text(
+                                    child: _isLoading
+                                        ? SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                      ),
+                                    )
+                                        : Text(
                                       'Lanjut!',
                                       style: TextStyle(
                                         fontSize: 16,
