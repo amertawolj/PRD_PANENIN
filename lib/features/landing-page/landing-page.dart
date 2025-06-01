@@ -59,7 +59,7 @@ class LandingPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(2),
                         ),
                         child: Image.asset(
-                          'assets/image/Group 35@2x.png',
+                          'assets/image/logopanenin.png',
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -78,7 +78,7 @@ class LandingPage extends StatelessWidget {
                           width: 200,
                           height: 200,
                           child: Image.asset(
-                            'assets/image/Group 35@2x.png',
+                            'assets/image/logopanenin.png',
                             fit: BoxFit.contain,
                           ),
                         ),
