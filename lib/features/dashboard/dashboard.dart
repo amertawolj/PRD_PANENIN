@@ -5,7 +5,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:prd_tubes/features/profile/profile.dart';
 import 'package:prd_tubes/features/finance/finance.dart';
 import 'package:prd_tubes/features/custservice/custservice.dart';
-import 'package:prd_tubes/features/finance/finance.dart';
 import 'package:prd_tubes/features/market/sales-analysis.dart';
 import 'package:prd_tubes/features/ai-tracker/pilihkategori.dart';
 import 'package:prd_tubes/features/orders/detail_komoditas_screen.dart';
@@ -14,6 +13,12 @@ import 'package:prd_tubes/features/orders/status_pesanan_screen.dart';
 import 'package:prd_tubes/features/tambah-produk/filled_tambah_produk_detail_screen.dart';
 import 'package:prd_tubes/features/tambah-produk/tambah_produk_detail_screen.dart';
 import 'package:prd_tubes/features/tambah-produk/tambah_produk_screen.dart';
+
+// Add imports for your bottom navigation screens here
+// import 'package:prd_tubes/features/home/home_screen.dart';  // Replace with actual path
+// import 'package:prd_tubes/features/products/products_screen.dart';  // Replace with actual path
+// import 'package:prd_tubes/features/messages/messages_screen.dart';  // Replace with actual path
+// import 'package:prd_tubes/features/settings/settings_screen.dart';  // Replace with actual path
 
 void main() {
   runApp(const MyApp());
@@ -37,8 +42,15 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class SeeAllFeaturesScreen extends StatelessWidget {
+class SeeAllFeaturesScreen extends StatefulWidget {
   const SeeAllFeaturesScreen({super.key});
+
+  @override
+  State<SeeAllFeaturesScreen> createState() => _SeeAllFeaturesScreenState();
+}
+
+class _SeeAllFeaturesScreenState extends State<SeeAllFeaturesScreen> {
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -208,6 +220,45 @@ class SeeAllFeaturesScreen extends StatelessWidget {
     }
   }
 
+  // Navigation function for bottom navbar
+  void _onBottomNavTap(int index) {
+    // Don't update _currentIndex here since we're navigating away
+
+    switch (index) {
+      case 0:
+      // Already on Beranda (current screen) - do nothing
+        break;
+      case 1:
+      // Navigate to Produk screen
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => TambahProdukScreen()),
+        );
+        break;
+      case 2:
+      // Navigate to Analisis screen
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SalesAnalysisScreen()),
+        );
+        break;
+      case 3:
+      // Navigate to Pesan screen - replace with your actual class name
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const profileScreen()), // TEMPORARY - replace with your messages screen
+        );
+        break;
+      case 4:
+      // Navigate to Pengaturan screen - replace with your actual class name
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const profileScreen()), // TEMPORARY - replace with your settings screen
+        );
+        break;
+    }
+  }
+
   Widget _buildFeatureCard(BuildContext context, IconData icon, String title, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
@@ -264,6 +315,8 @@ class SeeAllFeaturesScreen extends StatelessWidget {
         unselectedItemColor: Colors.grey,
         selectedFontSize: 12,
         unselectedFontSize: 12,
+        currentIndex: _currentIndex,
+        onTap: _onBottomNavTap,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
@@ -286,7 +339,6 @@ class SeeAllFeaturesScreen extends StatelessWidget {
             label: 'Pengaturan',
           ),
         ],
-        currentIndex: 0,
       ),
     );
   }
@@ -436,6 +488,8 @@ class FeatureScreen extends StatelessWidget {
     }
   }
 }
+
+// Remove these placeholder screens since you have your own classes
 
 // Navigation helper class
 class NavigationHelper {

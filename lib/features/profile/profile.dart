@@ -50,7 +50,7 @@ class profileScreen extends StatelessWidget {
 
       Navigator.pushNamedAndRemoveUntil(
         context,
-        '/logout', // This route now exists
+        '/', // This route now exists
             (route) => false,
       );
 

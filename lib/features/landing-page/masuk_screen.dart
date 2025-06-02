@@ -56,7 +56,6 @@ class _MasukPageState extends State<MasukPage> {
   }
 
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
