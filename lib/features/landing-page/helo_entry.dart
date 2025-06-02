@@ -14,6 +14,8 @@ void main() async{
   runApp(MyApp());
 }
 
+final supabase = Supabase.instance.client;
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
