@@ -7,14 +7,13 @@ import 'package:prd_tubes/features/landing-page/masuk_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 
-void main() async{
+void main() async {
   await Supabase.initialize(
       url: "https://mpeqosudxmqwanqlbnqe.supabase.co",
-      anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1wZXFvc3VkeG1xd2FucWxibnFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3OTMzNjIsImV4cCI6MjA2NDM2OTM2Mn0.uY3frt2ZQcGF-_XH5632jqwEdvnFZMxVE_QwIbbrGX0");
+      anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1wZXFvc3VkeG1xd2FucWxibnFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3OTMzNjIsImV4cCI6MjA2NDM2OTM2Mn0.uY3frt2ZQcGF-_XH5632jqwEdvnFZMxVE_QwIbbrGX0"
+  );
   runApp(MyApp());
 }
-
-final supabase = Supabase.instance.client;
 
 class MyApp extends StatelessWidget {
   @override

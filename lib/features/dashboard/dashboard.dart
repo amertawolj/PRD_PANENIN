@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:prd_tubes/features/notifikasi/stock_notification-screen.dart';
 
 // Import your existing feature screens
 import 'package:prd_tubes/features/profile/profile.dart';
@@ -13,6 +14,8 @@ import 'package:prd_tubes/features/orders/status_pesanan_screen.dart';
 import 'package:prd_tubes/features/tambah-produk/filled_tambah_produk_detail_screen.dart';
 import 'package:prd_tubes/features/tambah-produk/tambah_produk_detail_screen.dart';
 import 'package:prd_tubes/features/tambah-produk/tambah_produk_screen.dart';
+import 'package:prd_tubes/features/toko/toko_profile_screen.dart';
+import 'package:prd_tubes/features/notifikasi/stock_notification-screen.dart';
 
 // Add imports for your bottom navigation screens here
 // import 'package:prd_tubes/features/home/home_screen.dart';  // Replace with actual path
@@ -208,6 +211,17 @@ class _SeeAllFeaturesScreenState extends State<SeeAllFeaturesScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => PilihKategoriScreen()),
+        );
+        break;
+      case 'Tambah Pengingat':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => StockNotificationScreen()),
+        );
+      case 'Toko':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => TokoProfileScreen()),
         );
         break;
       default:
@@ -507,10 +521,16 @@ class NavigationHelper {
     // Navigate to specific Toko screen
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const TokoScreen()),
+      MaterialPageRoute(builder: (context) => const TokoProfileScreen()),
     );
   }
-
+  static void navigateToPengingat(BuildContext context) {
+    // Navigate to specific Toko screen
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => StockNotificationScreen()),
+    );
+  }
   static void navigateToPrediksiHarga(BuildContext context) {
     // Navigate to specific Prediksi Harga screen
     Navigator.push(

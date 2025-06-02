@@ -14,6 +14,8 @@ import 'package:prd_tubes/features/orders/status_pesanan_screen.dart';
 import 'package:prd_tubes/features/tambah-produk/filled_tambah_produk_detail_screen.dart';
 import 'package:prd_tubes/features/tambah-produk/tambah_produk_detail_screen.dart';
 import 'package:prd_tubes/features/tambah-produk/tambah_produk_screen.dart';
+import 'package:prd_tubes/features/notifikasi/stock_notification-screen.dart';
+import 'package:prd_tubes/features/toko/toko_profile_screen.dart';
 
 class HomepageScreen extends StatefulWidget {
   const HomepageScreen({super.key});
@@ -504,7 +506,10 @@ class _HomepageScreenState extends State<HomepageScreen> {
       {
         'icon': Iconsax.shop,
         'title': 'Toko',
-        'onTap': () => _navigateToFeature('Toko'),
+        'onTap': () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => TokoProfileScreen()),
+        ),
       },
       {
         'icon': Iconsax.chart_1,
@@ -525,7 +530,10 @@ class _HomepageScreenState extends State<HomepageScreen> {
       {
         'icon': Iconsax.home_2,
         'title': 'Tambah\nPengingat',
-        'onTap': () => _navigateToFeature('Tambah Pengingat'),
+        'onTap': () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => StockNotificationScreen()),
+        ),
       },
       {
         'icon': Iconsax.add_circle,
@@ -586,6 +594,15 @@ class _HomepageScreenState extends State<HomepageScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => const PilihKategoriScreen(),
+      ),
+    );
+  }
+
+  void _navigateToToko() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const TokoProfileScreen(),
       ),
     );
   }

@@ -76,13 +76,13 @@ class LandingPage extends StatelessWidget {
                         // Main logo/illustration
                         Container(
                           width: 200,
-                          height: 200,
+                          height: 100,
                           child: Image.asset(
                             'assets/image/logopanenin.png',
                             fit: BoxFit.contain,
                           ),
                         ),
-                        SizedBox(height: 40),
+                        SizedBox(height: 20),
 
                         // Main title
                         Text(

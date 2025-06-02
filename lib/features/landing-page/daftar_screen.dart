@@ -121,7 +121,7 @@ class _DaftarPageState extends State<DaftarPage> {
                           borderRadius: BorderRadius.circular(2),
                         ),
                         child: Image.asset(
-                          'assets/image/Group 35@2x.png',
+                          'assets/image/logopanenin.png',
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -139,14 +139,14 @@ class _DaftarPageState extends State<DaftarPage> {
 
                           // Logo illustration
                           Container(
-                            width: 120,
-                            height: 120,
+                            width: 180,
+                            height: 180,
                             child: Image.asset(
-                              'assets/image/Group 35@2x.png',
+                              'assets/image/logopanenin.png',
                               fit: BoxFit.contain,
                             ),
                           ),
-                          SizedBox(height: 30),
+                          SizedBox(height: 10),
 
                           // Registration form
                           Container(

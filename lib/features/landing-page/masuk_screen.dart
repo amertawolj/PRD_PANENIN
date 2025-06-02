@@ -110,7 +110,7 @@ class _MasukPageState extends State<MasukPage> {
                           borderRadius: BorderRadius.circular(2),
                         ),
                         child: Image.asset(
-                          'assets/image/Group 35@2x.png',
+                          'assets/image/logopanenin.png',
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -124,18 +124,19 @@ class _MasukPageState extends State<MasukPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Column(
                         children: [
-                          SizedBox(height: 40),
+                          SizedBox(height: 10),
 
                           // Logo illustration
                           Container(
-                            width: 150,
-                            height: 150,
+                            width: 200,
+                            height: 200,
                             child: Image.asset(
-                              'assets/image/Group 35@2x.png',
+                              'assets/image/logopanenin.png',
                               fit: BoxFit.contain,
                             ),
                           ),
-                          SizedBox(height: 40),
+                          SizedBox(height: 10),
+
 
                           // Login form
                           Container(
