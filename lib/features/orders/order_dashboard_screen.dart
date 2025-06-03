@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -11,6 +10,7 @@ class OrderDashboardScreen extends StatefulWidget {
 
 class _OrderDashboardScreenState extends State<OrderDashboardScreen> {
   int selectedEntries = 10;
+  String selectedFilter = "Semua"; // Filter for order status
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +77,11 @@ class _OrderDashboardScreenState extends State<OrderDashboardScreen> {
       },
     ];
 
+    // Filter orders based on selected filter
+    List<Map<String, String>> filteredOrders = selectedFilter == "Semua"
+        ? orders
+        : orders.where((order) => order["status"] == selectedFilter).toList();
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -98,45 +103,61 @@ class _OrderDashboardScreenState extends State<OrderDashboardScreen> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(12.0),
         child: Column(
           children: [
-            // Statistik
+            // Compact Statistics
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: const Color(0xFF3C5232),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  buildStatusBox("10", "Masuk"),
-                  buildStatusBox("7", "Diproses"),
-                  buildStatusBox("17", "Selesai"),
+                  buildCompactStatusBox("10", "Masuk"),
+                  buildCompactStatusBox("7", "Diproses"),
+                  buildCompactStatusBox("17", "Selesai"),
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 12),
 
-            // Dropdown + Search + Add Button
-            Row(
+            // Compact Controls
+            Column(
               children: [
                 Row(
                   children: [
-                    const Text(
-                      "Tunjukkan ",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
+                    Expanded(
+                      child: TextField(
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: 'Cari pesanan...',
+                          hintStyle: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                          ),
+                          prefixIcon: const Icon(Iconsax.search_normal, size: 20),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          isDense: true,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(6),
                       ),
                       child: DropdownButton<int>(
                         value: selectedEntries,
@@ -148,6 +169,7 @@ class _OrderDashboardScreenState extends State<OrderDashboardScreen> {
                             style: const TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w400,
+                              fontSize: 12,
                             ),
                           ),
                         ))
@@ -161,129 +183,174 @@ class _OrderDashboardScreenState extends State<OrderDashboardScreen> {
                         isDense: true,
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    const Text(
-                      " entri",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
                   ],
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: TextField(
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w400,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: 'Cari...',
-                      hintStyle: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      prefixIcon: const Icon(Iconsax.search_normal),
-                      contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 12),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
+                const SizedBox(height: 8),
+
+                // Status Filter Buttons
+                Row(
+                  children: [
+                    buildFilterChip("Semua"),
+                    const SizedBox(width: 6),
+                    buildFilterChip("Selesai"),
+                    const SizedBox(width: 6),
+                    buildFilterChip("Diproses"),
+                    const SizedBox(width: 6),
+                    buildFilterChip("Dibatalkan"),
+                  ],
                 ),
-                const SizedBox(width: 16),
-                ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Iconsax.add, color: Colors.black),
-                  label: const Text(
-                    "Add Customer",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w500,
+                const SizedBox(height: 8),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(Iconsax.add, color: Colors.black, size: 18),
+                    label: const Text(
+                      "Tambah Customer",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                      ),
                     ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    side: const BorderSide(color: Color(0xFF3C5232)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      side: const BorderSide(color: Color(0xFF3C5232)),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                    ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
 
-            // Tabel scrollable
+            // Card-based Order List (replacing table)
             Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Column(
-                  children: [
-                    // Header
-                    Row(
-                      children: const [
-                        TableHeader("Tracking ID"),
-                        TableHeader("Produk"),
-                        TableHeader("Jumlah"),
-                        TableHeader("Customer"),
-                        TableHeader("Tanggal"),
-                        TableHeader("Total"),
-                        TableHeader("Mode Pembayaran"),
-                        TableHeader("Status"),
-                        TableHeader("Aksi"),
-                      ],
+              child: ListView.builder(
+                itemCount: filteredOrders.length,
+                itemBuilder: (context, index) {
+                  final order = filteredOrders[index];
+                  return Card(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    elevation: 1,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    const SizedBox(height: 8),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Header row
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                order["id"] ?? "",
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              buildStatusBadge(order["status"] ?? ""),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
 
-                    // Isi tabel
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: orders.asMap().entries.map((entry) {
-                            int index = entry.key;
-                            var order = entry.value;
-                            final isEven = index % 2 == 0;
-
-                            return Container(
-                              color: isEven
-                                  ? const Color(0xFFE7EAE2)
-                                  : Colors.transparent,
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              child: Row(
-                                children: [
-                                  TableCellText(order["id"] ?? ""),
-                                  TableCellText(order["product"] ?? ""),
-                                  TableCellText(order["jumlah"] ?? ""),
-                                  TableCellText(order["customer"] ?? ""),
-                                  TableCellText(order["tanggal"] ?? ""),
-                                  TableCellText(order["total"] ?? ""),
-                                  TableCellText(order["pembayaran"] ?? ""),
-                                  TableCell(child: buildStatusBadge(order["status"] ?? "")),
-                                  TableCell(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        IconButton(
-                                          icon: const Icon(Iconsax.edit, color: Color(0xFF88541E)),
-                                          onPressed: () {},
-                                        ),
-                                        IconButton(
-                                          icon: const Icon(Iconsax.trash, color: Color(0xFF981616)),
-                                          onPressed: () {},
-                                        ),
-                                      ],
+                          // Product and customer
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      order["product"] ?? "",
+                                      style: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 13,
+                                      ),
                                     ),
+                                    Text(
+                                      "Qty: ${order["jumlah"]} • ${order["customer"]}",
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 11,
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Text(
+                                order["total"] ?? "",
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 13,
+                                  color: Color(0xFF3C5232),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+
+                          // Bottom row with date, payment, and actions
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      order["tanggal"] ?? "",
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 11,
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                    Text(
+                                      order["pembayaran"] ?? "",
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 11,
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Iconsax.edit, color: Color(0xFF88541E), size: 18),
+                                    onPressed: () {},
+                                    constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                                    padding: EdgeInsets.zero,
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Iconsax.trash, color: Color(0xFF981616), size: 18),
+                                    onPressed: () {},
+                                    constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                                    padding: EdgeInsets.zero,
                                   ),
                                 ],
                               ),
-                            );
-                          }).toList(),
-                        ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
             ),
           ],
@@ -292,34 +359,96 @@ class _OrderDashboardScreenState extends State<OrderDashboardScreen> {
     );
   }
 
-  Widget buildStatusBox(String count, String label) {
+  Widget buildFilterChip(String filter) {
+    final bool isSelected = selectedFilter == filter;
+
+    Color getChipColor() {
+      if (!isSelected) return Colors.grey.shade200;
+
+      switch (filter) {
+        case "Selesai":
+          return const Color(0xFFDFF5E7);
+        case "Diproses":
+          return const Color(0xFFFFF2E0);
+        case "Dibatalkan":
+          return const Color(0xFFFFE4E4);
+        default:
+          return const Color(0xFF3C5232);
+      }
+    }
+
+    Color getTextColor() {
+      if (!isSelected) return Colors.grey.shade700;
+
+      switch (filter) {
+        case "Selesai":
+          return const Color(0xFF268C54);
+        case "Diproses":
+          return const Color(0xFFCC7A00);
+        case "Dibatalkan":
+          return const Color(0xFFD93025);
+        default:
+          return Colors.white;
+      }
+    }
+
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            selectedFilter = filter;
+          });
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          decoration: BoxDecoration(
+            color: getChipColor(),
+            borderRadius: BorderRadius.circular(6),
+            border: isSelected ? null : Border.all(color: Colors.grey.shade300),
+          ),
+          child: Text(
+            filter,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: getTextColor(),
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+              fontFamily: 'Poppins',
+              fontSize: 11,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildCompactStatusBox(String count, String label) {
     return Column(
       children: [
         Container(
-          width: 80,
-          height: 60,
+          width: 60,
+          height: 40,
           decoration: BoxDecoration(
             color: const Color(0xFFF0F8F0),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(6),
           ),
           child: Center(
             child: Text(
               count,
               style: const TextStyle(
                 color: Colors.black,
-                fontSize: 24,
+                fontSize: 16,
                 fontWeight: FontWeight.w800,
                 fontFamily: 'Poppins',
               ),
             ),
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 4),
         Text(
           label,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 14,
+            fontSize: 11,
             fontWeight: FontWeight.w500,
             fontFamily: 'Poppins',
           ),
@@ -351,10 +480,10 @@ class _OrderDashboardScreenState extends State<OrderDashboardScreen> {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
         status,
@@ -362,64 +491,9 @@ class _OrderDashboardScreenState extends State<OrderDashboardScreen> {
           color: textColor,
           fontWeight: FontWeight.w600,
           fontFamily: 'Poppins',
+          fontSize: 10,
         ),
       ),
-    );
-  }
-}
-
-class TableHeader extends StatelessWidget {
-  final String title;
-  const TableHeader(this.title, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 120,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: Center(
-        child: Text(
-          title,
-          style: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontFamily: 'Poppins',
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
-}
-
-class TableCellText extends StatelessWidget {
-  final String value;
-  const TableCellText(this.value, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return TableCell(
-      child: Text(
-        value,
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          fontFamily: 'Poppins',
-          fontWeight: FontWeight.w400,
-        ),
-      ),
-    );
-  }
-}
-
-class TableCell extends StatelessWidget {
-  final Widget child;
-  const TableCell({required this.child, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 120,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: Center(child: child),
     );
   }
 }

@@ -31,7 +31,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF4A5D23),
+      backgroundColor: const Color(0xFF3C5232),
       body: SafeArea(
         child: Column(
           children: [
@@ -177,7 +177,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12), // Smaller radius
               image: const DecorationImage(
-                image: AssetImage('assets/image/Group 35@2x.png'),
+                image: AssetImage('assets/image/petani.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -305,7 +305,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
         Container(
           padding: const EdgeInsets.all(16), // Reduced padding
           decoration: BoxDecoration(
-            color: const Color(0xFF8FA26D),
+            color: const Color(0xFF3C5232),
             borderRadius: BorderRadius.circular(12), // Smaller radius
           ),
           child: Row(
@@ -378,7 +378,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12), // Reduced padding
                 decoration: BoxDecoration(
-                  color: const Color(0xFF4A5D23),
+                  color: const Color(0xFF3C5232),
                   borderRadius: BorderRadius.circular(6), // Smaller radius
                 ),
                 child: const Text(
@@ -448,6 +448,48 @@ class _HomepageScreenState extends State<HomepageScreen> {
     );
   }
 
+  void _onBottomNavTap(int index) {
+    // Don't update _currentIndex here since we're navigating away
+
+    switch (index) {
+      case 0:
+      // Already on Beranda (current screen) - do nothing
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SeeAllFeaturesScreen())
+        );
+        break;
+      case 1:
+      // Navigate to Produk screen
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => TambahProdukScreen()),
+        );
+        break;
+      case 2:
+      // Navigate to Analisis screen
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SalesAnalysisScreen()),
+        );
+        break;
+      case 3:
+      // Navigate to Pesan screen - replace with your actual class name
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const profileScreen()), // TEMPORARY - replace with your messages screen
+        );
+        break;
+      case 4:
+      // Navigate to Pengaturan screen - replace with your actual class name
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const profileScreen()), // TEMPORARY - replace with your settings screen
+        );
+        break;
+    }
+  }
+
   Widget _buildCompactBottomNavBar() {
     return Container(
       height: 60, // Fixed smaller height
@@ -475,6 +517,8 @@ class _HomepageScreenState extends State<HomepageScreen> {
             _currentBottomNavIndex = index;
           });
         },
+
+
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
@@ -581,7 +625,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
     );
   }
 
-  void _navigateToTambahProdukScreen() {
+  void _navigateToProduk() {
     Navigator.push(
       context,
       MaterialPageRoute(

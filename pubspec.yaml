@@ -43,6 +43,8 @@ flutter:
     - assets/image/graphdummy.png
     - assets/image/Group 35@2x.png
     - assets/image/logopanenin.png
+    - assets/image/petani.jpg
+
 
   # Local Font
   fonts:

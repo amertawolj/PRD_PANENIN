@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'product_dashboard_screen.dart'; // Import the ProductDashboardScreen
 import 'customer_reviews_screen.dart'; // Import the CustomerReviewsScreen
-
+import 'package:prd_tubes/features/finance/finance.dart';
 class TokoProfileScreen extends StatefulWidget {
   const TokoProfileScreen({super.key});
 
@@ -97,6 +97,15 @@ class _TokoProfileScreenState extends State<TokoProfileScreen> {
       ),
     );
   }
+  void _navigateToFinance() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const FinanceScreen(),
+      ),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -400,7 +409,10 @@ class _TokoProfileScreenState extends State<TokoProfileScreen> {
                         ),
                         const SizedBox(width: 8),
                         Expanded(
-                          child: _buildActionButton(Icons.trending_up, 'Analisis'),
+                          child: GestureDetector(
+                            onTap: _navigateToFinance,
+                            child: _buildActionButton(Icons.trending_up, 'Keuangan'),
+                          )
                         ),
                       ],
                     ),
@@ -444,7 +456,7 @@ class _TokoProfileScreenState extends State<TokoProfileScreen> {
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                             decoration: BoxDecoration(
-                              color: selectedTab == 0 ? const Color(0xFF5F6C37) : Colors.transparent,
+                              color: selectedTab == 0 ? const Color(0xFF3C5232) : Colors.transparent,
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Text(
@@ -466,7 +478,7 @@ class _TokoProfileScreenState extends State<TokoProfileScreen> {
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                             decoration: BoxDecoration(
-                              color: selectedTab == 1 ? const Color(0xFF5F6C37) : Colors.transparent,
+                              color: selectedTab == 1 ? const Color(0xFF3C5232) : Colors.transparent,
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Text(
@@ -598,7 +610,7 @@ class _TokoProfileScreenState extends State<TokoProfileScreen> {
                           child: ElevatedButton(
                             onPressed: _navigateToCustomerReviews, // Also navigate to CustomerReviewsScreen
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF5F6C37),
+                              backgroundColor: const Color(0xFF3C5232),
                               padding: const EdgeInsets.symmetric(vertical: 12),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
