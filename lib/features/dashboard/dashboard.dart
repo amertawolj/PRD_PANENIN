@@ -17,12 +17,6 @@ import 'package:prd_tubes/features/tambah-produk/tambah_produk_screen.dart';
 import 'package:prd_tubes/features/toko/toko_profile_screen.dart';
 import 'package:prd_tubes/features/notifikasi/stock_notification-screen.dart';
 
-// Add imports for your bottom navigation screens here
-// import 'package:prd_tubes/features/home/home_screen.dart';  // Replace with actual path
-// import 'package:prd_tubes/features/products/products_screen.dart';  // Replace with actual path
-// import 'package:prd_tubes/features/messages/messages_screen.dart';  // Replace with actual path
-// import 'package:prd_tubes/features/settings/settings_screen.dart';  // Replace with actual path
-
 void main() {
   runApp(const MyApp());
 }
@@ -53,67 +47,123 @@ class SeeAllFeaturesScreen extends StatefulWidget {
 }
 
 class _SeeAllFeaturesScreenState extends State<SeeAllFeaturesScreen> {
-  int _currentIndex = 0;
+  int _currentBottomNavIndex = 0;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'Lihat semua',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-      body: Stack(
+      body: Column(
         children: [
-          // Main Content
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                childAspectRatio: 1.0,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
+          // Fixed Header Section (Non-scrollable)
+          Container(
+            color: Colors.white,
+            child: SafeArea(
+              bottom: false,
+              child: Column(
+                children: [
+                  // App Bar
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        const Text(
+                          'Lihat semua',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              itemCount: _getFeatures(context).length,
-              itemBuilder: (context, index) {
-                final feature = _getFeatures(context)[index];
-                return _buildFeatureCard(
-                  context,
-                  feature['icon'] as IconData,
-                  feature['title'] as String,
-                  feature['onTap'] as VoidCallback,
-                );
-              },
             ),
           ),
 
-          // Bottom Wave Design
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: CustomPaint(
-              size: Size(MediaQuery.of(context).size.width, 200),
-              painter: WavePainter(),
+          // Scrollable Content Section
+          Expanded(
+            child: Stack(
+              children: [
+                // Main Content
+                CustomScrollView(
+                  slivers: [
+                    SliverPadding(
+                      padding: const EdgeInsets.all(16),
+                      sliver: SliverGrid(
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          childAspectRatio: 1.0,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                        ),
+                        delegate: SliverChildBuilderDelegate(
+                              (context, index) {
+                            final filteredFeatures = _getFilteredFeatures(context);
+                            if (index >= filteredFeatures.length) return null;
+
+                            final feature = filteredFeatures[index];
+                            return _buildFeatureCard(
+                              context,
+                              feature['icon'] as IconData,
+                              feature['title'] as String,
+                              feature['onTap'] as VoidCallback,
+                            );
+                          },
+                          childCount: _getFilteredFeatures(context).length,
+                        ),
+                      ),
+                    ),
+                    // Add some bottom padding to account for wave decoration
+                    const SliverPadding(
+                      padding: EdgeInsets.only(bottom: 200),
+                    ),
+                  ],
+                ),
+
+                // Bottom Wave Design (Fixed at bottom)
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: CustomPaint(
+                    size: Size(MediaQuery.of(context).size.width, 200),
+                    painter: WavePainter(),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
       ),
       bottomNavigationBar: _buildBottomNavBar(),
     );
+  }
+
+  List<Map<String, dynamic>> _getFilteredFeatures(BuildContext context) {
+    final allFeatures = _getFeatures(context);
+    if (_searchQuery.isEmpty) {
+      return allFeatures;
+    }
+
+    return allFeatures.where((feature) {
+      final title = (feature['title'] as String).toLowerCase();
+      return title.contains(_searchQuery);
+    }).toList();
   }
 
   List<Map<String, dynamic>> _getFeatures(BuildContext context) {
@@ -225,7 +275,6 @@ class _SeeAllFeaturesScreenState extends State<SeeAllFeaturesScreen> {
         );
         break;
       default:
-      // For features that don't have screens yet, show placeholder
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => FeatureScreen(featureName)),
@@ -234,40 +283,32 @@ class _SeeAllFeaturesScreenState extends State<SeeAllFeaturesScreen> {
     }
   }
 
-  // Navigation function for bottom navbar
   void _onBottomNavTap(int index) {
-    // Don't update _currentIndex here since we're navigating away
-
     switch (index) {
       case 0:
-      // Already on Beranda (current screen) - do nothing
         break;
       case 1:
-      // Navigate to Produk screen
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => TambahProdukScreen()),
         );
         break;
       case 2:
-      // Navigate to Analisis screen
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => SalesAnalysisScreen()),
         );
         break;
       case 3:
-      // Navigate to Pesan screen - replace with your actual class name
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const profileScreen()), // TEMPORARY - replace with your messages screen
+          MaterialPageRoute(builder: (context) => const profileScreen()),
         );
         break;
       case 4:
-      // Navigate to Pengaturan screen - replace with your actual class name
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const profileScreen()), // TEMPORARY - replace with your settings screen
+          MaterialPageRoute(builder: (context) => const profileScreen()),
         );
         break;
     }
@@ -312,6 +353,7 @@ class _SeeAllFeaturesScreenState extends State<SeeAllFeaturesScreen> {
 
   Widget _buildBottomNavBar() {
     return Container(
+      height: 60,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -327,10 +369,15 @@ class _SeeAllFeaturesScreenState extends State<SeeAllFeaturesScreen> {
         backgroundColor: Colors.white,
         selectedItemColor: const Color(0xFF4A5D23),
         unselectedItemColor: Colors.grey,
-        selectedFontSize: 12,
-        unselectedFontSize: 12,
-        currentIndex: _currentIndex,
-        onTap: _onBottomNavTap,
+        selectedFontSize: 10,
+        unselectedFontSize: 10,
+        iconSize: 20,
+        currentIndex: _currentBottomNavIndex,
+        onTap: (index) {
+          setState(() {
+            _currentBottomNavIndex = index;
+          });
+        },
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
@@ -414,7 +461,6 @@ class WavePainter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
 
-// Example feature screens that can be navigated to
 class FeatureScreen extends StatelessWidget {
   final String featureName;
 
@@ -503,8 +549,6 @@ class FeatureScreen extends StatelessWidget {
   }
 }
 
-// Remove these placeholder screens since you have your own classes
-
 // Navigation helper class
 class NavigationHelper {
   static void navigateToFeature(BuildContext context, String featureName) {
@@ -516,30 +560,26 @@ class NavigationHelper {
     );
   }
 
-  // You can add more specific navigation methods here
   static void navigateToToko(BuildContext context) {
-    // Navigate to specific Toko screen
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const TokoProfileScreen()),
     );
   }
+
   static void navigateToPengingat(BuildContext context) {
-    // Navigate to specific Toko screen
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => StockNotificationScreen()),
     );
   }
+
   static void navigateToPrediksiHarga(BuildContext context) {
-    // Navigate to specific Prediksi Harga screen
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const PrediksiHargaScreen()),
     );
   }
-
-// Add more navigation methods as needed...
 }
 
 // Example specific feature screens

@@ -85,7 +85,7 @@ class PilihKategoriScreen extends StatelessWidget {
                   const Text(
                     'Memberikan prediksi fluktuasi\nharga komoditas menggunakan\nkecerdasan buatan',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 12,
                       color: Colors.grey,
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Poppins',
@@ -107,7 +107,7 @@ class PilihKategoriScreen extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 14),
 
                   // Category buttons
                   Row(
@@ -126,7 +126,7 @@ class PilihKategoriScreen extends StatelessWidget {
                           },
                         ),
                       ),
-                      const SizedBox(width: 16),
+                      const SizedBox(width: 14),
                       Expanded(
                         child: _buildCategoryButton(
                           context,
@@ -156,9 +156,9 @@ class PilihKategoriScreen extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
         decoration: BoxDecoration(
-          color: const Color(0xFF7A8471),
+          color: const Color(0xFF3C5232),
           borderRadius: BorderRadius.circular(25),
         ),
         child: Text(

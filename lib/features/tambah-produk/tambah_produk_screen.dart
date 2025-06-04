@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'tambah_produk_detail_screen.dart';
-import 'filled_tambah_produk_detail_screen.dart'; // Add this import
+import 'filled_tambah_produk_detail_screen.dart';
 
 class TambahProdukScreen extends StatefulWidget {
   const TambahProdukScreen({super.key});
@@ -25,21 +25,21 @@ class _TambahProdukScreenState extends State<TambahProdukScreen> {
       name: 'Wortel Bekasi',
       weight: '50 Kg',
       status: 'Available',
-      statusColor: Colors.green.shade600,
+      statusColor: Color(0xFF3C5232),
       imagePath: 'assets/image/wortel.jpg',
     ),
     ProductItem(
-      name: 'Terong Penyamaran',
+      name: 'Terong',
       weight: '50 Kg',
       status: 'Available',
-      statusColor: Colors.green.shade600,
+      statusColor: Color(0xFF3C5232),
       imagePath: 'assets/image/terong.jpg',
     ),
     ProductItem(
       name: 'Jati Raya',
       weight: '130 Kg',
       status: 'Available',
-      statusColor: Colors.green.shade600,
+      statusColor: Color(0xFF3C5232),
       imagePath: 'assets/image/kayujati.jpg',
     ),
   ];
@@ -47,285 +47,284 @@ class _TambahProdukScreenState extends State<TambahProdukScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAF8), // Light greenish background
-      body: Stack(
+      backgroundColor: const Color(0xFFF8FAF8),
+      body: Column(
         children: [
-          // Main content wrapped in SingleChildScrollView
-          SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // App Bar
-                Container(
-                  color: Colors.white,
-                  child: SafeArea(
-                    bottom: false,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      child: Row(
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.arrow_back_ios, color: Colors.black87),
-                            onPressed: () => Navigator.pop(context),
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(),
-                          ),
-                          const SizedBox(width: 8),
-                          const Text(
-                            'Tambah Produk',
-                            style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Poppins',
-                            ),
-                          ),
-                        ],
-                      ),
+          // Compact App Bar
+          Container(
+            color: Colors.white,
+            child: SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back_ios, color: Colors.black87, size: 20),
+                      onPressed: () => Navigator.pop(context),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(minWidth: 24, minHeight: 24),
                     ),
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                // Header section with description - now part of main screen with black text
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: const Text(
-                    'Restok dan menambahkan produk baru',
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Poppins',
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                // Search Bar
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.green.shade50,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.green.shade200),
-                    ),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Cari produk...',
-                        hintStyle: TextStyle(
-                          color: Colors.green.shade400,
-                          fontSize: 14,
-                          fontFamily: 'Poppins',
-                        ),
-                        prefixIcon: Icon(
-                          Iconsax.search_normal,
-                          color: Colors.green.shade500,
-                          size: 20,
-                        ),
-                        border: InputBorder.none,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
-                        ),
-                      ),
+                    const SizedBox(width: 8),
+                    const Text(
+                      'Tambah Produk',
                       style: TextStyle(
-                        color: Colors.green.shade700,
+                        color: Colors.black87,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // Scrollable content
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 12),
+
+                  // Compact header
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: const Text(
+                      'Restok dan menambahkan produk baru',
+                      style: TextStyle(
+                        color: Colors.black54,
                         fontSize: 14,
+                        fontWeight: FontWeight.w400,
                         fontFamily: 'Poppins',
                       ),
                     ),
                   ),
-                ),
 
-                const SizedBox(height: 20),
+                  const SizedBox(height: 16),
 
-                // Tab bar and filter section
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      // Terbaru tab
-                      GestureDetector(
-                        onTap: () => setState(() => selectedTab = 0),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                          decoration: BoxDecoration(
-                            color: selectedTab == 0 ? Colors.green.shade600 : Colors.transparent,
-                            borderRadius: BorderRadius.circular(25),
+                  // Compact Search Bar
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.green.shade200, width: 0.5),
+                      ),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Cari produk...',
+                          hintStyle: TextStyle(
+                            color: Colors.grey.shade500,
+                            fontSize: 13,
+                            fontFamily: 'Poppins',
                           ),
-                          child: Text(
-                            'Terbaru',
-                            style: TextStyle(
-                              color: selectedTab == 0 ? Colors.white : Colors.grey.shade600,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: 'Poppins',
-                            ),
+                          prefixIcon: Icon(
+                            Iconsax.search_normal,
+                            color: Colors.grey.shade500,
+                            size: 18,
                           ),
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        ),
+                        style: TextStyle(
+                          color: Colors.grey.shade700,
+                          fontSize: 13,
+                          fontFamily: 'Poppins',
                         ),
                       ),
+                    ),
+                  ),
 
-                      const SizedBox(width: 16),
+                  const SizedBox(height: 16),
 
-                      // Terlaris tab
-                      GestureDetector(
-                        onTap: () => setState(() => selectedTab = 1),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                          decoration: BoxDecoration(
-                            color: selectedTab == 1 ? Colors.green.shade600 : Colors.transparent,
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          child: Text(
-                            'Terlaris',
-                            style: TextStyle(
-                              color: selectedTab == 1 ? Colors.white : Colors.grey.shade600,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: 'Poppins',
+                  // Tab bar and filter section
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      children: [
+                        // Terbaru tab
+                        GestureDetector(
+                          onTap: () => setState(() => selectedTab = 0),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: selectedTab == 0 ? Color(0xFF3C5232) : Colors.transparent,
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                          ),
-                        ),
-                      ),
-
-                      const Spacer(),
-
-                      // Filter button
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: Colors.grey.shade300),
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.1),
-                              spreadRadius: 1,
-                              blurRadius: 2,
-                              offset: const Offset(0, 1),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              'Filter',
+                            child: Text(
+                              'Terbaru',
                               style: TextStyle(
-                                color: Colors.grey.shade700,
-                                fontSize: 14,
+                                color: selectedTab == 0 ? Colors.white : Colors.grey.shade600,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
                                 fontFamily: 'Poppins',
                               ),
                             ),
-                            const SizedBox(width: 4),
-                            Icon(Iconsax.filter, size: 16, color: Colors.grey.shade700),
-                          ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
 
-                const SizedBox(height: 20),
+                        const SizedBox(width: 12),
 
-                // Products grid with minimum height to ensure proper layout
-                Container(
-                  constraints: BoxConstraints(
-                    minHeight: MediaQuery.of(context).size.height * 0.6,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.8,
-                        crossAxisSpacing: 12,
-                        mainAxisSpacing: 12,
-                      ),
-                      itemCount: products.length + 1, // +1 for add button
-                      itemBuilder: (context, index) {
-                        if (index == products.length) {
-                          // Add new product button
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const TambahProdukDetailScreen(),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.green.shade50,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: Colors.green.shade200,
-                                  width: 1.5,
-                                  style: BorderStyle.solid,
-                                ),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      color: Colors.green.shade100,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Icon(
-                                      Icons.add,
-                                      size: 32,
-                                      color: Colors.green.shade600,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 12),
-                                  Text(
-                                    'Produk Baru',
-                                    style: TextStyle(
-                                      color: Colors.green.shade700,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'Poppins',
-                                    ),
-                                  ),
-                                ],
+                        // Terlaris tab
+                        GestureDetector(
+                          onTap: () => setState(() => selectedTab = 1),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: selectedTab == 1 ? Color(0xFF3C5232) : Colors.transparent,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              'Terlaris',
+                              style: TextStyle(
+                                color: selectedTab == 1 ? Colors.white : Colors.grey.shade600,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Poppins',
                               ),
                             ),
-                          );
-                        }
+                          ),
+                        ),
 
-                        final product = products[index];
-                        return ProductCard(
-                          product: product,
-                          onTap: () {
-                            // Navigate to FilledTambahProdukDetailScreen if product is Tomat Ciwi
-                            if (product.name == 'Tomat Ciwi') {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const FilledTambahProdukDetailScreen(),
+                        const Spacer(),
+
+                        // Compact filter button
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.grey.shade300, width: 0.5),
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.08),
+                                spreadRadius: 1,
+                                blurRadius: 2,
+                                offset: const Offset(0, 1),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'Filter',
+                                style: TextStyle(
+                                  color: Colors.grey.shade600,
+                                  fontSize: 13,
+                                  fontFamily: 'Poppins',
                                 ),
-                              );
-                            }
-                            // You can add navigation for other products here if needed
-                          },
-                        );
-                      },
+                              ),
+                              const SizedBox(width: 4),
+                              Icon(Iconsax.filter, size: 14, color: Colors.grey.shade600),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
 
-                // Bottom curved design - same as DetailKomoditasScreen
-                _buildBottomCurvedDesign(),
-              ],
+                  const SizedBox(height: 16),
+
+                  // Products grid with better mobile sizing
+                  Container(
+                    constraints: BoxConstraints(
+                      minHeight: MediaQuery.of(context).size.height * 0.5,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.75,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                        itemCount: products.length + 1,
+                        itemBuilder: (context, index) {
+                          if (index == products.length) {
+                            // Add new product button
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const TambahProdukDetailScreen(),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.green.shade50,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: Colors.green.shade200,
+                                    width: 1,
+                                    style: BorderStyle.solid,
+                                  ),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.green.shade100,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Icon(
+                                        Icons.add,
+                                        size: 24,
+                                        color: Color(0xFF3C5232),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      'Produk Baru',
+                                      style: TextStyle(
+                                        color: Colors.green.shade700,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+
+                          final product = products[index];
+                          return ProductCard(
+                            product: product,
+                            onTap: () {
+                              // Navigate to FilledTambahProdukDetailScreen if product is Tomat Ciwi
+                              if (product.name == 'Tomat Ciwi') {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const FilledTambahProdukDetailScreen(),
+                                  ),
+                                );
+                              }
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+
+                  // Bottom curved design
+                  _buildBottomCurvedDesign(),
+                ],
+              ),
             ),
           ),
         ],
@@ -333,10 +332,9 @@ class _TambahProdukScreenState extends State<TambahProdukScreen> {
     );
   }
 
-  // Bottom curved design method from DetailKomoditasScreen
   Widget _buildBottomCurvedDesign() {
     return Container(
-      height: 120,
+      height: 80, // Reduced height for mobile
       width: double.infinity,
       child: CustomPaint(
         painter: CurvedBottomPainter(),
@@ -345,8 +343,6 @@ class _TambahProdukScreenState extends State<TambahProdukScreen> {
   }
 }
 
-
-// Bottom curved painter - copied from DetailKomoditasScreen
 class CurvedBottomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
@@ -418,24 +414,24 @@ class CurvedBottomPainter extends CustomPainter {
 
 class ProductCard extends StatelessWidget {
   final ProductItem product;
-  final VoidCallback? onTap; // Add onTap callback
+  final VoidCallback? onTap;
 
   const ProductCard({super.key, required this.product, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector( // Wrap with GestureDetector
+    return GestureDetector(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
-              color: Colors.green.withOpacity(0.08),
+              color: Colors.green.withOpacity(0.06),
               spreadRadius: 1,
-              blurRadius: 6,
-              offset: const Offset(0, 3),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -449,8 +445,8 @@ class ProductCard extends StatelessWidget {
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(12),
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
                   ),
                 ),
                 child: Stack(
@@ -458,8 +454,8 @@ class ProductCard extends StatelessWidget {
                     // Product image
                     ClipRRect(
                       borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(12),
-                        topRight: Radius.circular(12),
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
                       ),
                       child: Image.asset(
                         product.imagePath,
@@ -467,7 +463,6 @@ class ProductCard extends StatelessWidget {
                         height: double.infinity,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
-                          // Fallback to colored container if image fails to load
                           return Container(
                             width: double.infinity,
                             height: double.infinity,
@@ -484,7 +479,7 @@ class ProductCard extends StatelessWidget {
                             child: Icon(
                               Icons.eco,
                               color: Colors.green.shade400,
-                              size: 40,
+                              size: 32,
                             ),
                           );
                         },
@@ -492,13 +487,13 @@ class ProductCard extends StatelessWidget {
                     ),
                     // Status badge
                     Positioned(
-                      top: 8,
-                      left: 8,
+                      top: 6,
+                      left: 6,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                         decoration: BoxDecoration(
                           color: product.statusColor,
-                          borderRadius: BorderRadius.circular(6),
+                          borderRadius: BorderRadius.circular(4),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.1),
@@ -512,7 +507,7 @@ class ProductCard extends StatelessWidget {
                           product.status,
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 10,
+                            fontSize: 9,
                             fontWeight: FontWeight.w600,
                             fontFamily: 'Poppins',
                           ),
@@ -528,7 +523,7 @@ class ProductCard extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -537,7 +532,7 @@ class ProductCard extends StatelessWidget {
                       product.name,
                       style: TextStyle(
                         color: Colors.grey.shade800,
-                        fontSize: 14,
+                        fontSize: 12,
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Poppins',
                       ),
@@ -547,8 +542,8 @@ class ProductCard extends StatelessWidget {
                     Text(
                       product.weight,
                       style: TextStyle(
-                        color: Colors.green.shade600,
-                        fontSize: 12,
+                        color: Color(0xFF3C5232),
+                        fontSize: 11,
                         fontWeight: FontWeight.w500,
                         fontFamily: 'Poppins',
                       ),

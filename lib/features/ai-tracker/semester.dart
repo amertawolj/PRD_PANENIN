@@ -100,7 +100,7 @@ class _SemesterScreenState extends State<SemesterScreen> {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       decoration: BoxDecoration(
-        color: const Color(0xFF9CAF88),
+        color: const Color(0xFF3C5232),
         borderRadius: BorderRadius.circular(25),
       ),
       child: Column(
@@ -112,7 +112,7 @@ class _SemesterScreenState extends State<SemesterScreen> {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
               decoration: BoxDecoration(
-                color: const Color(0xFF9CAF88),
+                color: const Color(0xFF3C5232),
                 borderRadius: BorderRadius.circular(25),
               ),
               child: Row(
@@ -143,7 +143,7 @@ class _SemesterScreenState extends State<SemesterScreen> {
               width: double.infinity,
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
               decoration: const BoxDecoration(
-                color: Color(0xFF9CAF88),
+                color: Color(0xFF3C5232),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(25),
                   bottomRight: Radius.circular(25),

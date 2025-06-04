@@ -163,7 +163,7 @@ class _StockNotificationScreenState extends State<StockNotificationScreen> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF6B8E23),
+                        backgroundColor: Color(0xFF3C5232),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -396,10 +396,10 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                         margin: EdgeInsets.only(right: 8),
                         padding: EdgeInsets.symmetric(vertical: 12),
                         decoration: BoxDecoration(
-                          color: isSelected ? Color(0xFF6B8E23) : Colors.white,
+                          color: isSelected ? Color(0xFF3C5232) : Colors.white,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: isSelected ? Color(0xFF6B8E23) : Colors.grey[300]!,
+                            color: isSelected ? Color(0xFF3C5232) : Colors.grey[300]!,
                           ),
                         ),
                         child: Row(
@@ -764,7 +764,7 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                       child: ElevatedButton(
                         onPressed: _saveProduct,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF6B8E23),
+                          backgroundColor: Color(0xFF3C5232),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -793,10 +793,10 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: isSelected ? Color(0xFF6B8E23) : Colors.white,
+        color: isSelected ? Color(0xFF3C5232) : Colors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: isSelected ? Color(0xFF6B8E23) : Colors.grey[300]!,
+          color: isSelected ? Color(0xFF3C5232) : Colors.grey[300]!,
         ),
       ),
       child: Text(
@@ -1052,10 +1052,10 @@ class _StockFromExistingScreenState extends State<StockFromExistingScreen> {
                         margin: EdgeInsets.only(right: 8),
                         padding: EdgeInsets.symmetric(vertical: 12),
                         decoration: BoxDecoration(
-                          color: isSelected ? Color(0xFF6B8E23) : Colors.white,
+                          color: isSelected ? Color(0xFF3C5232) : Colors.white,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: isSelected ? Color(0xFF6B8E23) : Colors.grey[300]!,
+                            color: isSelected ? Color(0xFF3C5232) : Colors.grey[300]!,
                           ),
                         ),
                         child: Row(
@@ -1248,10 +1248,10 @@ class _StockFromExistingScreenState extends State<StockFromExistingScreen> {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         decoration: BoxDecoration(
-                          color: isSelected ? Color(0xFF6B8E23) : Colors.white,
+                          color: isSelected ? Color(0xFF3C5232) : Colors.white,
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                            color: isSelected ? Color(0xFF6B8E23) : Colors.grey[300]!,
+                            color: isSelected ? Color(0xFF3C5232) : Colors.grey[300]!,
                           ),
                         ),
                         child: Text(
@@ -1338,7 +1338,7 @@ class _StockFromExistingScreenState extends State<StockFromExistingScreen> {
                       child: ElevatedButton(
                         onPressed: _saveNotificationSettings,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF6B8E23),
+                          backgroundColor: Color(0xFF3C5232),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -1407,7 +1407,7 @@ class _StockFromExistingScreenState extends State<StockFromExistingScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Notifikasi stok berhasil diatur!'),
-          backgroundColor: Color(0xFF6B8E23),
+          backgroundColor: Color(0xFF3C5232),
         ),
       );
 

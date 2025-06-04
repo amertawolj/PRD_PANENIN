@@ -43,7 +43,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
       name: 'Tomat Ciwi',
       weight: '1 Kg',
       status: 'Low Stock',
-      statusColor: Color(0xFF042631),
+      statusColor: Colors.red,
       imagePath: 'assets/image/tomat.jpeg',
       hasCart: true,
     ),
@@ -51,7 +51,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
       name: 'Worrel Bekasi',
       weight: '50 Kg',
       status: 'Available',
-      statusColor: Color(0xFF2E7D32),
+      statusColor: Color(0xFF3C5232),
       imagePath: 'assets/image/wortel.jpg',
       hasCart: false,
     ),
@@ -59,7 +59,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
       name: 'Terong Penyamaran',
       weight: '50 Kg',
       status: 'Available',
-      statusColor: Color(0xFF2E7D32),
+      statusColor: Color(0xFF3C5232),
       imagePath: 'assets/image/terong.jpg',
       hasCart: false,
     ),
@@ -67,7 +67,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
       name: 'Jati Raya',
       weight: '130 Kg',
       status: 'Available',
-      statusColor: Color(0xFF2E7D32),
+      statusColor: Color(0xFF3C5232),
       imagePath: 'assets/image/kayujati.jpg',
       hasCart: false,
     ),
@@ -137,9 +137,9 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
                             margin: EdgeInsets.only(right: index < filters.length - 1 ? 12 : 0),
                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             decoration: BoxDecoration(
-                              color: isSelected ? Color(0xFF2E7D32) : Colors.white,
+                              color: isSelected ? Color(0xFF3C5232) : Colors.white,
                               border: Border.all(
-                                color: Color(0xFF2E7D32),
+                                color: Color(0xFF3C5232),
                                 width: 1,
                               ),
                               borderRadius: BorderRadius.circular(20),
@@ -147,7 +147,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
                             child: Text(
                               filter,
                               style: TextStyle(
-                                color: isSelected ? Colors.white : Color(0xFF2E7D32),
+                                color: isSelected ? Colors.white : Color(0xFF3C5232),
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
                                 fontFamily: 'Poppins',
@@ -196,7 +196,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(
-                  color: Color(0xFF2E7D32),
+                  color: Color(0xFF3C5232),
                   width: 1,
                 ),
                 borderRadius: BorderRadius.circular(8),
@@ -231,9 +231,9 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
                       Expanded(
                         child: _buildStatCard(
                           'Produk Tersedia',
-                          '4 komoditas',
-                          '24 kg',
-                          Color(0xFF2E7D32),
+                          '4\nproduk',
+                          '24 kg total',
+                          Color(0xFF3C5232),
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -242,7 +242,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
                           'Stok Bulan Ini',
                           '311 kg',
                           '',
-                          Color(0xFF2E7D32),
+                          Color(0xFF3C5232),
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -251,7 +251,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
                           'Penjualan',
                           '70kg',
                           '22.5% dari stok',
-                          Color(0xFF2E7D32),
+                          Color(0xFF3C5232),
                         ),
                       ),
                     ],
@@ -316,7 +316,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
-                      side: BorderSide(color: Color(0xFF2E7D32)),
+                      side: BorderSide(color: Color(0xFF3C5232)),
                     ),
                   ),
                   child: const Text(
@@ -343,7 +343,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
                     // Navigate to add product screen
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF2E7D32),
+                    backgroundColor: Color(0xFF3C5232),
                     elevation: 0,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
@@ -384,9 +384,9 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
           margin: const EdgeInsets.symmetric(horizontal: 4),
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-            color: isSelected ? Color(0xFF2E7D32) : Colors.white,
+            color: isSelected ? Color(0xFF3C5232) : Colors.white,
             border: Border.all(
-              color: Color(0xFF2E7D32),
+              color: Color(0xFF3C5232),
               width: 1,
             ),
             borderRadius: BorderRadius.circular(8),
@@ -402,7 +402,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
               Text(
                 category.name,
                 style: TextStyle(
-                  color: isSelected ? Colors.white : Color(0xFF2E7D32),
+                  color: isSelected ? Colors.white : Color(0xFF3C5232),
                   fontSize: 11,
                   fontWeight: FontWeight.w500,
                   fontFamily: 'Poppins',
@@ -518,7 +518,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
                             ),
                             child: Icon(
                               Icons.eco,
-                              color: Color(0xFF2E7D32),
+                              color: Color(0xFF3C5232),
                               size: 30,
                             ),
                           );
@@ -572,7 +572,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
                     Text(
                       product.weight,
                       style: TextStyle(
-                        color: Color(0xFF2E7D32),
+                        color: Color(0xFF3C5232),
                         fontSize: 11,
                         fontWeight: FontWeight.w500,
                         fontFamily: 'Poppins',
@@ -654,7 +654,7 @@ class _ProductDetailCartScreenState extends State<ProductDetailCartScreen> {
                             ),
                             child: Icon(
                               Icons.eco,
-                              color: Color(0xFF2E7D32),
+                              color: Color(0xFF3C5232),
                               size: 80,
                             ),
                           );
@@ -837,7 +837,7 @@ class _ProductDetailCartScreenState extends State<ProductDetailCartScreen> {
                               onPressed: () {
                                 setState(() => quantity++);
                               },
-                              color: Color(0xFF2E7D32),
+                              color: Color(0xFF3C5232),
                             ),
                           ],
                         ),
@@ -846,6 +846,7 @@ class _ProductDetailCartScreenState extends State<ProductDetailCartScreen> {
                   ),
 
                   const Spacer(),
+
 
                   // Add to cart button
                   SizedBox(
@@ -856,12 +857,12 @@ class _ProductDetailCartScreenState extends State<ProductDetailCartScreen> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('$quantity ${widget.product.name} ditambahkan ke keranjang'),
-                            backgroundColor: Color(0xFF2E7D32),
+                            backgroundColor: Color(0xFF3C5232),
                           ),
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF2E7D32),
+                        backgroundColor: Color(0xFF3C5232),
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),

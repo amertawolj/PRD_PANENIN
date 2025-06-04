@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:prd_tubes/features/finance/finance.dart';
 import 'product_dashboard_screen.dart'; // Import the ProductDashboardScreen
 import 'customer_reviews_screen.dart'; // Import the CustomerReviewsScreen
+import 'package:prd_tubes/features/market/sales-analysis.dart';
 import 'package:prd_tubes/features/finance/finance.dart';
 class TokoProfileScreen extends StatefulWidget {
   const TokoProfileScreen({super.key});
@@ -16,7 +18,7 @@ class _TokoProfileScreenState extends State<TokoProfileScreen> {
 
   final List<ProductItem> products = [
     ProductItem(
-      name: 'Tomat Ciwi',
+      name: 'Tomat Ciawi',
       weight: '1 Kg',
       price: 'Rp 15,000',
       imagePath: 'assets/image/tomat.jpeg',
@@ -28,7 +30,7 @@ class _TokoProfileScreenState extends State<TokoProfileScreen> {
       imagePath: 'assets/image/terong.jpg',
     ),
     ProductItem(
-      name: 'Jati Raya',
+      name: 'Jati Ambon',
       weight: '130 Kg',
       price: 'Rp 85,000',
       imagePath: 'assets/image/kayujati.jpg',
@@ -88,7 +90,6 @@ class _TokoProfileScreenState extends State<TokoProfileScreen> {
     );
   }
 
-  // Navigation function for Ulasan button
   void _navigateToCustomerReviews() {
     Navigator.push(
       context,
@@ -97,11 +98,20 @@ class _TokoProfileScreenState extends State<TokoProfileScreen> {
       ),
     );
   }
-  void _navigateToFinance() {
+  // Navigation function for Ulasan button
+  void _navigateToKeuangan() {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => const FinanceScreen(),
+      ),
+    );
+  }
+  void _navigateToPerforma() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SalesAnalysisScreen(),
       ),
     );
   }
@@ -116,16 +126,10 @@ class _TokoProfileScreenState extends State<TokoProfileScreen> {
           children: [
             // Dark Green header section
             Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0xFF042631), // Dark green
-                    Color(0xFF5F6C37), // Slightly lighter dark green
-                  ],
-                ),
+              decoration: BoxDecoration(
+                color: Color(0xFF3C5232),
               ),
+
               child: SafeArea(
                 bottom: false,
                 child: Column(
@@ -332,7 +336,7 @@ class _TokoProfileScreenState extends State<TokoProfileScreen> {
                                   border: Border.all(
                                     color: isSelected
                                         ? category['activeColor']
-                                        : const Color(0xFF2E7D32),
+                                        : const Color(0xFF3C5232),
                                     width: 1,
                                   ),
                                 ),
@@ -403,15 +407,15 @@ class _TokoProfileScreenState extends State<TokoProfileScreen> {
                         const SizedBox(width: 8),
                         Expanded(
                           child: GestureDetector(
-                            onTap: _navigateToCustomerReviews, // Navigate to CustomerReviewsScreen
-                            child: _buildActionButton(Icons.chat_bubble_outline, 'Ulasan'),
+                            onTap: _navigateToKeuangan,
+                            child: _buildActionButton(Icons.currency_exchange, 'Keuangan'),
                           ),
                         ),
                         const SizedBox(width: 8),
                         Expanded(
                           child: GestureDetector(
-                            onTap: _navigateToFinance,
-                            child: _buildActionButton(Icons.trending_up, 'Keuangan'),
+                            onTap: _navigateToPerforma,
+                            child: _buildActionButton(Icons.trending_up, 'Performa'),
                           )
                         ),
                       ],
@@ -563,14 +567,6 @@ class _TokoProfileScreenState extends State<TokoProfileScreen> {
                                 color: Colors.black87,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                fontFamily: 'Poppins',
-                              ),
-                            ),
-                            Text(
-                              'Lihat komentar pelanggan',
-                              style: TextStyle(
-                                color: Colors.grey.shade600,
-                                fontSize: 12,
                                 fontFamily: 'Poppins',
                               ),
                             ),

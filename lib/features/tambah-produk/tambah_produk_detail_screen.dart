@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -23,6 +22,7 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
   List<String> selectedPenyimpanan = [];
 
   final List<String> categories = ['Buah', 'Sayur', 'Kacang'];
+  List<String> units = ['Kg', 'Gram', 'Ton'];
   final List<String> penyimpananOptions = [
     'Suhu Ruang',
     'Kulkas',
@@ -74,10 +74,10 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
       },
       child: Container(
         margin: const EdgeInsets.only(right: 8, bottom: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
         decoration: BoxDecoration(
           color: isSelected ? Colors.green.shade100 : Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(18),
           border: Border.all(
             color: isSelected ? Colors.green.shade400 : Colors.grey.shade300,
           ),
@@ -94,7 +94,7 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
           option,
           style: TextStyle(
             color: isSelected ? Colors.green.shade700 : Colors.grey.shade600,
-            fontSize: 14,
+            fontSize: 13,
             fontWeight: isSelected ? FontWeight.w500 : FontWeight.w400,
             fontFamily: 'Poppins',
           ),
@@ -137,8 +137,8 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
-                      width: 100,
-                      height: 100,
+                      width: 90,
+                      height: 90,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.topLeft,
@@ -156,19 +156,19 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                       ),
                       child: Icon(
                         Icons.add_a_photo,
-                        size: 32,
+                        size: 28,
                         color: Colors.green.shade600,
                       ),
                     ),
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
 
                   // Category section
                   Text(
                     'Kategori Produk',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 15,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Poppins',
                       color: Colors.grey.shade800,
@@ -183,67 +183,70 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                       color: Colors.grey,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
 
-                  // Category chips
-                  Row(
-                    children: categories.map((category) {
-                      bool isSelected = selectedCategory == category;
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 12),
-                        child: GestureDetector(
-                          onTap: () => setState(() => selectedCategory = category),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                            decoration: BoxDecoration(
-                              color: isSelected ? Colors.green.shade100 : Colors.white,
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: isSelected ? Colors.green.shade400 : Colors.grey.shade300,
-                              ),
-                              boxShadow: isSelected ? [
-                                BoxShadow(
-                                  color: Colors.green.withOpacity(0.2),
-                                  spreadRadius: 1,
-                                  blurRadius: 3,
-                                  offset: const Offset(0, 2),
+                  // Category chips - Made flexible to prevent overflow
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: categories.map((category) {
+                        bool isSelected = selectedCategory == category;
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: GestureDetector(
+                            onTap: () => setState(() => selectedCategory = category),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+                              decoration: BoxDecoration(
+                                color: isSelected ? Colors.green.shade100 : Colors.white,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: isSelected ? Colors.green.shade400 : Colors.grey.shade300,
                                 ),
-                              ] : null,
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  category == 'Buah' ? Icons.apple :
-                                  category == 'Sayur' ? Icons.eco : Icons.grain,
-                                  size: 16,
-                                  color: isSelected ? Colors.green.shade600 : Colors.grey,
-                                ),
-                                const SizedBox(width: 6),
-                                Text(
-                                  category,
-                                  style: TextStyle(
-                                    color: isSelected ? Colors.green.shade700 : Colors.grey,
-                                    fontSize: 14,
-                                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                                    fontFamily: 'Poppins',
+                                boxShadow: isSelected ? [
+                                  BoxShadow(
+                                    color: Colors.green.withOpacity(0.2),
+                                    spreadRadius: 1,
+                                    blurRadius: 3,
+                                    offset: const Offset(0, 2),
                                   ),
-                                ),
-                              ],
+                                ] : null,
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    category == 'Buah' ? Icons.apple :
+                                    category == 'Sayur' ? Icons.eco : Icons.grain,
+                                    size: 15,
+                                    color: isSelected ? Colors.green.shade600 : Colors.grey,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    category,
+                                    style: TextStyle(
+                                      color: isSelected ? Colors.green.shade700 : Colors.grey,
+                                      fontSize: 13,
+                                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    }).toList(),
+                        );
+                      }).toList(),
+                    ),
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
 
                   // Product name field
                   Text(
                     'Nama Produk',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 15,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Poppins',
                       color: Colors.grey.shade800,
@@ -277,13 +280,13 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
 
                   // Product description field
                   Text(
                     'Deskripsi Produk',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 15,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Poppins',
                       color: Colors.grey.shade800,
@@ -318,13 +321,13 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
 
                   // Quantity section (fixed kg unit)
                   Text(
                     'Kuantitas Minimum Pemesanan',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 15,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Poppins',
                       color: Colors.grey.shade800,
@@ -382,13 +385,13 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                     ],
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
 
-                  // Tanggal Panen field (changed from Target Panen)
+                  // Tanggal Panen field
                   Text(
                     'Tanggal Panen',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 15,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Poppins',
                       color: Colors.grey.shade800,
@@ -432,28 +435,29 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
 
-                  // Consumption period section (new design with number inputs)
+                  // Consumption period section - Made flexible to prevent overflow
                   Text(
                     'Baik Dikonsumsi Sebelum',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 15,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Poppins',
                       color: Colors.grey.shade800,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
 
+                  // Flexible row for consumption period
                   Row(
                     children: [
                       // Hari
-                      Expanded(
+                      Flexible(
                         child: Row(
                           children: [
                             SizedBox(
-                              width: 50,
+                              width: 45,
                               child: TextField(
                                 controller: hariController,
                                 keyboardType: TextInputType.number,
@@ -483,25 +487,27 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 8),
-                            const Text(
-                              'hari',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontFamily: 'Poppins',
-                                color: Colors.black87,
+                            const SizedBox(width: 6),
+                            const Flexible(
+                              child: Text(
+                                'hari',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontFamily: 'Poppins',
+                                  color: Colors.black87,
+                                ),
                               ),
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(width: 16),
+                      const SizedBox(width: 12),
                       // Bulan
-                      Expanded(
+                      Flexible(
                         child: Row(
                           children: [
                             SizedBox(
-                              width: 50,
+                              width: 45,
                               child: TextField(
                                 controller: bulanController,
                                 keyboardType: TextInputType.number,
@@ -531,25 +537,27 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 8),
-                            const Text(
-                              'bulan',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontFamily: 'Poppins',
-                                color: Colors.black87,
+                            const SizedBox(width: 6),
+                            const Flexible(
+                              child: Text(
+                                'bulan',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontFamily: 'Poppins',
+                                  color: Colors.black87,
+                                ),
                               ),
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(width: 16),
+                      const SizedBox(width: 12),
                       // Tahun
-                      Expanded(
+                      Flexible(
                         child: Row(
                           children: [
                             SizedBox(
-                              width: 50,
+                              width: 45,
                               child: TextField(
                                 controller: tahunController,
                                 keyboardType: TextInputType.number,
@@ -579,13 +587,15 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 8),
-                            const Text(
-                              'tahun',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontFamily: 'Poppins',
-                                color: Colors.black87,
+                            const SizedBox(width: 6),
+                            const Flexible(
+                              child: Text(
+                                'tahun',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontFamily: 'Poppins',
+                                  color: Colors.black87,
+                                ),
                               ),
                             ),
                           ],
@@ -594,13 +604,13 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                     ],
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
 
-                  // Penyimpanan section (dropdown-like field)
+                  // Penyimpanan section
                   Text(
                     'Penyimpanan',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 15,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Poppins',
                       color: Colors.grey.shade800,
@@ -688,13 +698,13 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                     ),
                   ],
 
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 24),
                 ],
               ),
             ),
           ),
 
-          // Bottom buttons section (Batalkan & Simpan)
+          // Bottom buttons section
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -717,7 +727,7 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Colors.grey.shade700,
                       side: BorderSide(color: Colors.grey.shade300),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -725,7 +735,7 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                     child: const Text(
                       'Batalkan',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 15,
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Poppins',
                       ),
@@ -745,7 +755,7 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green.shade700,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -754,7 +764,7 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                     child: const Text(
                       'Simpan',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 15,
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Poppins',
                       ),

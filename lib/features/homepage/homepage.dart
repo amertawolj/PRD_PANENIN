@@ -33,13 +33,15 @@ class _HomepageScreenState extends State<HomepageScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFF3C5232),
       body: SafeArea(
-        child: Column(
-          children: [
-            // Compact Header Section
-            _buildCompactHeader(),
+        child: CustomScrollView(
+          slivers: [
+            // Header section as a sliver
+            SliverToBoxAdapter(
+              child: _buildCompactHeader(),
+            ),
 
-            // Main Content Area
-            Expanded(
+            // Main content section as a sliver
+            SliverToBoxAdapter(
               child: Container(
                 decoration: const BoxDecoration(
                   color: Colors.white,
@@ -48,30 +50,28 @@ class _HomepageScreenState extends State<HomepageScreen> {
                     topRight: Radius.circular(20),
                   ),
                 ),
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16), // Reduced padding
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 16), // Reduced spacing
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 16),
 
-                        // Compact Akses Cepat Section
-                        _buildAksesCepatSection(),
+                      // Compact Akses Cepat Section
+                      _buildAksesCepatSection(),
 
-                        const SizedBox(height: 20), // Reduced spacing
+                      const SizedBox(height: 20),
 
-                        // Compact Rangkuman Pesanan Section
-                        _buildCompactRangkumanPesananSection(),
+                      // Compact Rangkuman Pesanan Section
+                      _buildCompactRangkumanPesananSection(),
 
-                        const SizedBox(height: 20), // Reduced spacing
+                      const SizedBox(height: 20),
 
-                        // Compact Komoditas Section
-                        _buildCompactKomoditasSection(),
+                      // Compact Komoditas Section
+                      _buildCompactKomoditasSection(),
 
-                        const SizedBox(height: 80), // Space for bottom nav
-                      ],
-                    ),
+                      const SizedBox(height: 80), // Space for bottom nav
+                    ],
                   ),
                 ),
               ),
@@ -79,13 +79,13 @@ class _HomepageScreenState extends State<HomepageScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: _buildCompactBottomNavBar(),
+      bottomNavigationBar: _buildBottomNavBar(),
     );
   }
 
   Widget _buildCompactHeader() {
     return Container(
-      padding: const EdgeInsets.all(16), // Reduced padding
+      padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           // Compact top bar with greeting and icons
@@ -93,19 +93,19 @@ class _HomepageScreenState extends State<HomepageScreen> {
             children: [
               // Smaller profile avatar
               Container(
-                width: 32, // Reduced size
+                width: 32,
                 height: 32,
                 decoration: BoxDecoration(
                   color: Colors.orange,
-                  borderRadius: BorderRadius.circular(10), // Smaller radius
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Icon(
                   Icons.person,
                   color: Colors.white,
-                  size: 20, // Smaller icon
+                  size: 20,
                 ),
               ),
-              const SizedBox(width: 10), // Reduced spacing
+              const SizedBox(width: 10),
 
               // Greeting text
               const Expanded(
@@ -113,7 +113,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                   'Halo, User',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 18, // Smaller font
+                    fontSize: 18,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Poppins',
                   ),
@@ -125,7 +125,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                 children: [
                   IconButton(
                     onPressed: () {},
-                    padding: const EdgeInsets.all(6), // Reduced padding
+                    padding: const EdgeInsets.all(6),
                     constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                     icon: const Icon(Icons.mail_outline, color: Colors.white, size: 20),
                   ),
@@ -146,21 +146,21 @@ class _HomepageScreenState extends State<HomepageScreen> {
             ],
           ),
 
-          const SizedBox(height: 16), // Reduced spacing
+          const SizedBox(height: 16),
 
           // Compact search bar
           Container(
-            height: 42, // Fixed smaller height
+            height: 42,
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.9),
-              borderRadius: BorderRadius.circular(12), // Smaller radius
+              borderRadius: BorderRadius.circular(12),
             ),
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Cari...',
                 hintStyle: TextStyle(
                   color: Colors.grey[600],
-                  fontSize: 13, // Smaller font
+                  fontSize: 13,
                 ),
                 prefixIcon: Icon(Icons.search, color: Colors.grey[600], size: 18),
                 border: InputBorder.none,
@@ -169,13 +169,13 @@ class _HomepageScreenState extends State<HomepageScreen> {
             ),
           ),
 
-          const SizedBox(height: 16), // Reduced spacing
+          const SizedBox(height: 16),
 
           // Compact featured banner
           Container(
-            height: 110, // Reduced height
+            height: 110,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12), // Smaller radius
+              borderRadius: BorderRadius.circular(12),
               image: const DecorationImage(
                 image: AssetImage('assets/image/petani.jpg'),
                 fit: BoxFit.cover,
@@ -193,14 +193,14 @@ class _HomepageScreenState extends State<HomepageScreen> {
                   ],
                 ),
               ),
-              padding: const EdgeInsets.all(16), // Reduced padding
+              padding: const EdgeInsets.all(16),
               child: const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'TerKini! Petani juga ikut\nmenolak RUU TNI.',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 15, // Smaller font
+                    fontSize: 15,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Poppins',
                   ),
@@ -295,7 +295,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
         const Text(
           'Rangkuman Pesanan',
           style: TextStyle(
-            fontSize: 16, // Smaller title
+            fontSize: 16,
             fontWeight: FontWeight.w600,
             fontFamily: 'Poppins',
           ),
@@ -303,10 +303,10 @@ class _HomepageScreenState extends State<HomepageScreen> {
         const SizedBox(height: 12),
 
         Container(
-          padding: const EdgeInsets.all(16), // Reduced padding
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: const Color(0xFF3C5232),
-            borderRadius: BorderRadius.circular(12), // Smaller radius
+            borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -323,17 +323,17 @@ class _HomepageScreenState extends State<HomepageScreen> {
 
   Widget _buildCompactOrderSummaryItem(String count, String label) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16), // Reduced padding
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.9),
-        borderRadius: BorderRadius.circular(10), // Smaller radius
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         children: [
           Text(
             count,
             style: const TextStyle(
-              fontSize: 20, // Smaller number
+              fontSize: 20,
               fontWeight: FontWeight.w700,
               fontFamily: 'Poppins',
             ),
@@ -342,7 +342,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
           Text(
             label,
             style: const TextStyle(
-              fontSize: 12, // Smaller label
+              fontSize: 12,
               fontWeight: FontWeight.w500,
               fontFamily: 'Poppins',
               color: Colors.black87,
@@ -360,7 +360,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
         const Text(
           'Komoditas Terlaris',
           style: TextStyle(
-            fontSize: 16, // Smaller title
+            fontSize: 16,
             fontWeight: FontWeight.w600,
             fontFamily: 'Poppins',
           ),
@@ -368,30 +368,30 @@ class _HomepageScreenState extends State<HomepageScreen> {
         const SizedBox(height: 12),
 
         Container(
-          padding: const EdgeInsets.all(14), // Reduced padding
+          padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             color: const Color(0xFF8FA26D),
-            borderRadius: BorderRadius.circular(12), // Smaller radius
+            borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12), // Reduced padding
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                 decoration: BoxDecoration(
                   color: const Color(0xFF3C5232),
-                  borderRadius: BorderRadius.circular(6), // Smaller radius
+                  borderRadius: BorderRadius.circular(6),
                 ),
                 child: const Text(
                   'Komoditas Terlaris Bulan Ini',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 12, // Smaller font
+                    fontSize: 12,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Poppins',
                   ),
                 ),
               ),
-              const SizedBox(height: 12), // Reduced spacing
+              const SizedBox(height: 12),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -412,23 +412,23 @@ class _HomepageScreenState extends State<HomepageScreen> {
     return Column(
       children: [
         Container(
-          width: 48, // Smaller size
+          width: 48,
           height: 48,
           decoration: BoxDecoration(
             color: itemColor.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(10), // Smaller radius
+            borderRadius: BorderRadius.circular(10),
           ),
           child: Icon(
             Icons.eco_outlined,
             color: itemColor,
-            size: 24, // Smaller icon
+            size: 24,
           ),
         ),
         const SizedBox(height: 6),
         Text(
           name,
           style: const TextStyle(
-            fontSize: 11, // Smaller font
+            fontSize: 11,
             fontWeight: FontWeight.w600,
             fontFamily: 'Poppins',
             color: Colors.white,
@@ -438,7 +438,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
         Text(
           price,
           style: const TextStyle(
-            fontSize: 10, // Smaller font
+            fontSize: 10,
             fontWeight: FontWeight.w400,
             fontFamily: 'Poppins',
             color: Colors.white70,
@@ -449,50 +449,43 @@ class _HomepageScreenState extends State<HomepageScreen> {
   }
 
   void _onBottomNavTap(int index) {
-    // Don't update _currentIndex here since we're navigating away
-
     switch (index) {
       case 0:
-      // Already on Beranda (current screen) - do nothing
         Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SeeAllFeaturesScreen())
+            context,
+            MaterialPageRoute(builder: (context) => SeeAllFeaturesScreen())
         );
         break;
       case 1:
-      // Navigate to Produk screen
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => TambahProdukScreen()),
         );
         break;
       case 2:
-      // Navigate to Analisis screen
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => SalesAnalysisScreen()),
         );
         break;
       case 3:
-      // Navigate to Pesan screen - replace with your actual class name
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const profileScreen()), // TEMPORARY - replace with your messages screen
+          MaterialPageRoute(builder: (context) => const profileScreen()),
         );
         break;
       case 4:
-      // Navigate to Pengaturan screen - replace with your actual class name
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const profileScreen()), // TEMPORARY - replace with your settings screen
+          MaterialPageRoute(builder: (context) => const profileScreen()),
         );
         break;
     }
   }
 
-  Widget _buildCompactBottomNavBar() {
+  Widget _buildBottomNavBar() {
     return Container(
-      height: 60, // Fixed smaller height
+      height: 60,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -508,17 +501,15 @@ class _HomepageScreenState extends State<HomepageScreen> {
         backgroundColor: Colors.white,
         selectedItemColor: const Color(0xFF4A5D23),
         unselectedItemColor: Colors.grey,
-        selectedFontSize: 10, // Smaller font
+        selectedFontSize: 10,
         unselectedFontSize: 10,
-        iconSize: 20, // Smaller icons
+        iconSize: 20,
         currentIndex: _currentBottomNavIndex,
         onTap: (index) {
           setState(() {
             _currentBottomNavIndex = index;
           });
         },
-
-
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
@@ -633,6 +624,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
       ),
     );
   }
+
   void _navigateToTrackerAI() {
     Navigator.push(
       context,
@@ -650,9 +642,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
       ),
     );
   }
-
 }
-
 
 class FeatureScreen extends StatelessWidget {
   final String featureName;

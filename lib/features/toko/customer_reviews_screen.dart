@@ -68,16 +68,6 @@ class _CustomerReviewsScreenState extends State<CustomerReviewsScreen> {
         children: [
           // Header
           Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFF042631), // Dark green
-                  Color(0xFF5F6C37), // Slightly lighter dark green
-                ],
-              ),
-            ),
             child: SafeArea(
               bottom: false,
               child: Padding(
@@ -85,7 +75,7 @@ class _CustomerReviewsScreenState extends State<CustomerReviewsScreen> {
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 20),
+                      icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
                       onPressed: () => Navigator.pop(context),
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
@@ -94,7 +84,7 @@ class _CustomerReviewsScreenState extends State<CustomerReviewsScreen> {
                     const Text(
                       'Ulasan Pelanggan',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Poppins',
@@ -134,14 +124,17 @@ class _CustomerReviewsScreenState extends State<CustomerReviewsScreen> {
                 const SizedBox(height: 16),
 
                 // Filter tabs
-                Row(
-                  children: [
-                    _buildFilterTab('Terbaru', selectedFilter == 'Terbaru'),
-                    const SizedBox(width: 12),
-                    _buildFilterTab('Rating Tinggi', selectedFilter == 'Rating Tinggi'),
-                    const SizedBox(width: 12),
-                    _buildFilterTab('Rating Rendah', selectedFilter == 'Rating Rendah'),
-                  ],
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      _buildFilterTab('Terbaru', selectedFilter == 'Terbaru'),
+                      const SizedBox(width: 12),
+                      _buildFilterTab('Rating Tinggi', selectedFilter == 'Rating Tinggi'),
+                      const SizedBox(width: 12),
+                      _buildFilterTab('Rating Rendah', selectedFilter == 'Rating Rendah'),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -173,10 +166,10 @@ class _CustomerReviewsScreenState extends State<CustomerReviewsScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF5F6C37) : Colors.transparent,
+          color: isSelected ? const Color(0xFF3C5232) : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? const Color(0xFF5F6C37) : Colors.grey.shade300,
+            color: isSelected ? const Color(0xFF3C5232) : Colors.grey.shade300,
           ),
         ),
         child: Text(

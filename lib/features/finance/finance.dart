@@ -376,7 +376,7 @@ class FinanceScreen extends StatelessWidget {
           _showDownloadDialog();
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF4A5D23),
+          backgroundColor: const Color(0xFF3C5232),
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
