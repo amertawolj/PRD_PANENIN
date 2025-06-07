@@ -24,11 +24,11 @@ class ProductService {
       final fileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
 
       await supabase.storage
-          .from('product')
+          .from('product-image')
           .uploadBinary('images/$fileName', imageBytes);
 
       imageUrl = supabase.storage
-          .from('product')
+          .from('product-image')
           .getPublicUrl('images/$fileName');
     }
 
