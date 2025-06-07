@@ -43,7 +43,7 @@ class ProductService {
       'image_url': imageUrl,
       'price': harga,
       'kadaluarsa': kadaluarsa.toIso8601String(),
-      'UID': supabase.auth.currentUser?.id, // Pastikan nama kolom foreign key-nya benar
+      'uid': supabase.auth.currentUser?.id, // Pastikan nama kolom foreign key-nya benar
     });
 
   }
