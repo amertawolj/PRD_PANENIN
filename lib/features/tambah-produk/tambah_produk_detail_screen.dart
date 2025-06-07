@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:image_picker/image_picker.dart';
 
 class TambahProdukDetailScreen extends StatefulWidget {
   const TambahProdukDetailScreen({super.key});
@@ -31,6 +33,16 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
     'Hindari Sinar Matahari',
     'Wadah Kedap Udara'
   ];
+
+  //image picker
+  final ImagePicker _picker = ImagePicker();
+  XFile? _pickedImage;
+  Future<void> pickImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      print('File path: ${image.path}');
+    }
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -153,12 +165,20 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                           color: Colors.green.shade300,
                           width: 1.5,
                         ),
+                        image: _pickedImage != null
+                            ? DecorationImage(
+                          image: FileImage(File(_pickedImage!.path)),
+                          fit: BoxFit.cover,
+                        )
+                            : null,
                       ),
-                      child: Icon(
-                        Icons.add_a_photo,
-                        size: 28,
-                        color: Colors.green.shade600,
-                      ),
+                      child: _pickedImage == null
+                        ? Icon(
+                            Icons.add_a_photo,
+                            size: 28,
+                            color: Colors.green.shade600,
+                          )
+                        : null,
                     ),
                   ),
 
