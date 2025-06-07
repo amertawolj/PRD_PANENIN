@@ -21,7 +21,7 @@ dependencies:
   path_provider: ^2.1.1  # For file management
   path: ^1.8.3  # For path operations
   supabase_flutter: ^2.9.0
-  image_picker: ^1.0.4  # for image handling
+  image_picker: ^0.8.7+4  # for image handling
 
 
 # Packages Ends
