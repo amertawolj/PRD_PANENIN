@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'tambah_produk_detail_screen.dart';
 import 'filled_tambah_produk_detail_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TambahProdukScreen extends StatefulWidget {
   const TambahProdukScreen({super.key});
@@ -11,38 +12,40 @@ class TambahProdukScreen extends StatefulWidget {
 }
 
 class _TambahProdukScreenState extends State<TambahProdukScreen> {
+
   int selectedTab = 0; // 0 for Terbaru, 1 for Terlaris
 
-  final List<ProductItem> products = [
-    ProductItem(
-      name: 'Tomat Ciwi',
-      weight: '1 Kg',
-      status: 'Low Stock',
-      statusColor: Colors.red,
-      imagePath: 'assets/image/tomat.jpeg',
-    ),
-    ProductItem(
-      name: 'Wortel Bekasi',
-      weight: '50 Kg',
-      status: 'Available',
-      statusColor: Color(0xFF3C5232),
-      imagePath: 'assets/image/wortel.jpg',
-    ),
-    ProductItem(
-      name: 'Terong',
-      weight: '50 Kg',
-      status: 'Available',
-      statusColor: Color(0xFF3C5232),
-      imagePath: 'assets/image/terong.jpg',
-    ),
-    ProductItem(
-      name: 'Jati Raya',
-      weight: '130 Kg',
-      status: 'Available',
-      statusColor: Color(0xFF3C5232),
-      imagePath: 'assets/image/kayujati.jpg',
-    ),
-  ];
+  List<ProductItem> products = []; // Empty list initially
+  bool isLoading = true; // To show loading state
+  final SupabaseClient supabase = Supabase.instance.client;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProducts();
+  }
+
+  Future<void> _loadProducts() async {
+    try {
+      final response = await supabase
+          .from('products')
+          .select()
+          .eq('uid', supabase.auth.currentUser?.id ?? '');
+
+      setState(() {
+        products = response.map<ProductItem>((product) => ProductItem(
+          name: product['product_name'] ?? '',
+          weight: '${product['stok']} kg', // or however you want to display weight
+          status: product['stok'] > 0 ? 'Tersedia' : 'Habis',
+          statusColor: product['stok'] > 0 ? Colors.green : Colors.red,
+          imagePath: product['image_url'] ?? 'assets/default_product.png',
+        )).toList();
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() => isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -247,18 +250,22 @@ class _TambahProdukScreenState extends State<TambahProdukScreen> {
                           crossAxisSpacing: 10,
                           mainAxisSpacing: 10,
                         ),
-                        itemCount: products.length + 1,
+                        itemCount: isLoading ? 1 : products.length + 1,
                         itemBuilder: (context, index) {
                           if (index == products.length) {
+                            if (isLoading) {
+                              return Center(child: CircularProgressIndicator());
+                            }
                             // Add new product button
                             return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const TambahProdukDetailScreen(),
-                                  ),
-                                );
+                            onTap: () async {
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const TambahProdukDetailScreen(),
+                                ),
+                              );
+                              _loadProducts(); // Add this line
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -457,7 +464,8 @@ class ProductCard extends StatelessWidget {
                         topLeft: Radius.circular(10),
                         topRight: Radius.circular(10),
                       ),
-                      child: Image.asset(
+                      child: product.imagePath.startsWith('http')
+                          ? Image.network(
                         product.imagePath,
                         width: double.infinity,
                         height: double.infinity,
@@ -476,10 +484,41 @@ class ProductCard extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            child: Icon(
-                              Icons.eco,
-                              color: Colors.green.shade400,
-                              size: 32,
+                            child: Center(
+                              child: Icon(
+                                Icons.eco,
+                                color: Colors.green.shade400,
+                                size: 32,
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                          : Image.asset(
+                        product.imagePath,
+                        width: double.infinity,
+                        height: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            width: double.infinity,
+                            height: double.infinity,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Colors.green.shade100,
+                                  Colors.green.shade200,
+                                ],
+                              ),
+                            ),
+                            child: Center(
+                              child: Icon(
+                                Icons.eco,
+                                color: Colors.green.shade400,
+                                size: 32,
+                              ),
                             ),
                           );
                         },
