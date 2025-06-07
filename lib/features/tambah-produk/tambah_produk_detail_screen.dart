@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:prd_tubes/services/product_service.dart';
 
 class TambahProdukDetailScreen extends StatefulWidget {
   const TambahProdukDetailScreen({super.key});
@@ -11,6 +12,8 @@ class TambahProdukDetailScreen extends StatefulWidget {
 }
 
 class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
+  final ProductService _productService = ProductService();
+
   final TextEditingController namaController = TextEditingController();
   final TextEditingController deskripsiController = TextEditingController();
   final TextEditingController kuantitasController = TextEditingController();
@@ -42,6 +45,9 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
   Future<void> pickImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
+      setState(() {
+        _pickedImage = image;
+      });
       print('File path: ${image.path}');
     }
   }
@@ -150,37 +156,40 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                   // Image picker section (aligned left)
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Container(
-                      width: 90,
-                      height: 90,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Colors.green.shade100,
-                            Colors.green.shade200,
-                          ],
+                    child: GestureDetector(
+                      onTap: pickImage,
+                      child: Container(
+                        width: 90,
+                        height: 90,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Colors.green.shade100,
+                              Colors.green.shade200,
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.green.shade300,
+                            width: 1.5,
+                          ),
+                          image: _pickedImage != null
+                              ? DecorationImage(
+                            image: FileImage(File(_pickedImage!.path)),
+                            fit: BoxFit.cover,
+                          )
+                              : null,
                         ),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: Colors.green.shade300,
-                          width: 1.5,
-                        ),
-                        image: _pickedImage != null
-                            ? DecorationImage(
-                          image: FileImage(File(_pickedImage!.path)),
-                          fit: BoxFit.cover,
+                        child: _pickedImage == null
+                            ? Icon(
+                          Icons.add_a_photo,
+                          size: 28,
+                          color: Colors.green.shade600,
                         )
                             : null,
                       ),
-                      child: _pickedImage == null
-                        ? Icon(
-                            Icons.add_a_photo,
-                            size: 28,
-                            color: Colors.green.shade600,
-                          )
-                        : null,
                     ),
                   ),
 
@@ -894,9 +903,42 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                 // Simpan button
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Handle form submission
-                      Navigator.pop(context);
+                    onPressed: () async {
+                      try {
+                        // Calculate expiry date
+                        int days = int.tryParse(hariController.text) ?? 0;
+                        int months = int.tryParse(bulanController.text) ?? 0;
+                        int years = int.tryParse(tahunController.text) ?? 0;
+
+                        DateTime harvestDate = DateTime.parse(tanggalPanenController.text.split('/').reversed.join('-'));
+                        DateTime expiryDate = DateTime(
+                          harvestDate.year + years,
+                          harvestDate.month + months,
+                          harvestDate.day + days,
+                        );
+
+                        await _productService.uploadProduct(
+                          nama: namaController.text,
+                          deskripsi: deskripsiController.text,
+                          moq: double.tryParse(kuantitasController.text) ?? 0.0,
+                          panen: harvestDate,
+                          harga: int.tryParse(hargaController.text) ?? 0,
+                          penyimpanan: selectedPenyimpanan.join(', '),
+                          kategori: selectedCategory,
+                          kadaluarsa: expiryDate,
+                          stok: int.tryParse(stokController.text) ?? 0,
+                          imageFile: _pickedImage != null ? File(_pickedImage!.path) : null,
+                        );
+
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Produk berhasil disimpan!')),
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Error: $e')),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green.shade700,

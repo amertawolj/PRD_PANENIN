@@ -13,6 +13,7 @@ class ProductService {
     required String penyimpanan,
     required String kategori,
     required DateTime kadaluarsa,
+    required int stok,
     File? imageFile,
   }) async {
 
@@ -31,19 +32,18 @@ class ProductService {
           .getPublicUrl('images/$fileName');
     }
 
-    // ✅ GANTI 'products' DENGAN NAMA TABEL PRODUK KAMU DI SUPABASE
     await supabase.from('products').insert({
-      // 🔧 Cek dan sesuaikan semua key berikut dengan NAMA KOLOM DI SUPABASE
-      'product_name': nama,               // Ganti kalau nama kolom di Supabase kamu beda
+      'product_name': nama,
       'product_description': deskripsi,
       'moq': moq,
-      'harvest_date': panen.toIso8601String(),    // Pastikan ini format ISO
+      'harvest_date': panen.toIso8601String(),
       'storage': penyimpanan,
       'cathegory': kategori,
       'image_url': imageUrl,
       'price': harga,
+      'stok': stok,
       'kadaluarsa': kadaluarsa.toIso8601String(),
-      'uid': supabase.auth.currentUser?.id, // Pastikan nama kolom foreign key-nya benar
+      'uid': supabase.auth.currentUser?.id,
     });
 
   }
