@@ -22,7 +22,7 @@ dependencies:
   path: ^1.8.3  # For path operations
   supabase_flutter: ^2.9.0
   image_picker: ^0.8.7+4  # for image handling
-
+  intl: ^0.18.1
 
 # Packages Ends
 

@@ -250,7 +250,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
                         child: _buildStatCard(
                           'Produk Tersedia',
                           '$availableProductsCount\nproduk',
-                          '${totalStockKg.toInt()} kg total',
+                          '',
                           Color(0xFF3C5232),
                         ),
                       ),
