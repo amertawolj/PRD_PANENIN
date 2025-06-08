@@ -27,15 +27,22 @@ class _TambahProdukScreenState extends State<TambahProdukScreen> {
 
   Future<void> _loadProducts() async {
     try {
+      print('Loading products...');
+      print('Current user ID: ${supabase.auth.currentUser?.id}');
+
       final response = await supabase
           .from('products')
           .select()
           .eq('uid', supabase.auth.currentUser?.id ?? '');
 
+      print('Response: $response');
+      print('Number of products: ${response.length}');
+
       setState(() {
         products = response.map<ProductItem>((product) => ProductItem(
           name: product['product_name'] ?? '',
-          weight: '${product['stok']} kg', // or however you want to display weight
+          weight: '${product['stok']} kg',
+          price: 'Rp ${product['price'] ?? 0}',
           status: product['stok'] > 0 ? 'Tersedia' : 'Habis',
           statusColor: product['stok'] > 0 ? Colors.green : Colors.red,
           imagePath: product['image_url'] ?? 'assets/default_product.png',
@@ -43,6 +50,7 @@ class _TambahProdukScreenState extends State<TambahProdukScreen> {
         isLoading = false;
       });
     } catch (e) {
+      print('Error loading products: $e');
       setState(() => isLoading = false);
     }
   }
@@ -252,7 +260,7 @@ class _TambahProdukScreenState extends State<TambahProdukScreen> {
                         ),
                         itemCount: isLoading ? 1 : products.length + 1,
                         itemBuilder: (context, index) {
-                          if (index == products.length) {
+                          if (index == 0) {
                             if (isLoading) {
                               return Center(child: CircularProgressIndicator());
                             }
@@ -308,7 +316,7 @@ class _TambahProdukScreenState extends State<TambahProdukScreen> {
                             );
                           }
 
-                          final product = products[index];
+                          final product = products[index - 1];
                           return ProductCard(
                             product: product,
                             onTap: () {
@@ -569,21 +577,29 @@ class ProductCard extends StatelessWidget {
                   children: [
                     Text(
                       product.name,
-                      style: TextStyle(
-                        color: Colors.grey.shade800,
-                        fontSize: 12,
+                      style: const TextStyle(
+                        color: Colors.black87,
+                        fontSize: 11,
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Poppins',
                       ),
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       product.weight,
                       style: TextStyle(
-                        color: Color(0xFF3C5232),
+                        color: Colors.grey.shade600,
+                        fontSize: 9,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                    Text(
+                      product.price,
+                      style: const TextStyle(
+                        color: Color(0xFF2E7D32),
                         fontSize: 11,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                         fontFamily: 'Poppins',
                       ),
                     ),
@@ -601,6 +617,7 @@ class ProductCard extends StatelessWidget {
 class ProductItem {
   final String name;
   final String weight;
+  final String price;
   final String status;
   final Color statusColor;
   final String imagePath;
@@ -608,6 +625,7 @@ class ProductItem {
   ProductItem({
     required this.name,
     required this.weight,
+    required this.price,
     required this.status,
     required this.statusColor,
     required this.imagePath,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProductDashboardScreen extends StatefulWidget {
   const ProductDashboardScreen({super.key});
@@ -38,40 +39,39 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
     ),
   ];
 
-  final List<ProductDashboardItem> products = [
-    ProductDashboardItem(
-      name: 'Tomat Ciwi',
-      weight: '1 Kg',
-      status: 'Low Stock',
-      statusColor: Colors.red,
-      imagePath: 'assets/image/tomat.jpeg',
-      hasCart: true,
-    ),
-    ProductDashboardItem(
-      name: 'Worrel Bekasi',
-      weight: '50 Kg',
-      status: 'Available',
-      statusColor: Color(0xFF3C5232),
-      imagePath: 'assets/image/wortel.jpg',
-      hasCart: false,
-    ),
-    ProductDashboardItem(
-      name: 'Terong Penyamaran',
-      weight: '50 Kg',
-      status: 'Available',
-      statusColor: Color(0xFF3C5232),
-      imagePath: 'assets/image/terong.jpg',
-      hasCart: false,
-    ),
-    ProductDashboardItem(
-      name: 'Jati Raya',
-      weight: '130 Kg',
-      status: 'Available',
-      statusColor: Color(0xFF3C5232),
-      imagePath: 'assets/image/kayujati.jpg',
-      hasCart: false,
-    ),
-  ];
+  List<ProductItem> products = [];
+  bool isLoading = true;
+  final SupabaseClient supabase = Supabase.instance.client;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProducts();
+  }
+
+  Future<void> _loadProducts() async {
+    try {
+      final response = await supabase
+          .from('products')
+          .select()
+          .eq('uid', supabase.auth.currentUser?.id ?? '');
+
+      setState(() {
+        products = response.map<ProductItem>((product) => ProductItem(
+          name: product['product_name'] ?? '',
+          weight: '${product['stok']} kg',
+          price: 'Rp ${product['price'] ?? 0}',
+          status: product['stok'] > 0 ? 'Available' : 'Habis',
+          statusColor: product['stok'] > 0 ? Color(0xFF3C5232) : Colors.red,
+          imagePath: product['image_url'] ?? 'assets/default_product.png',
+        )).toList();
+        isLoading = false;
+      });
+    } catch (e) {
+      print('Error loading products: $e');
+      setState(() => isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -290,8 +290,12 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
                   crossAxisSpacing: 8,
                   mainAxisSpacing: 8,
                 ),
-                itemCount: products.length,
+                itemCount: isLoading ? 1 : products.length,
                 itemBuilder: (context, index) {
+                  if (isLoading) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+
                   final product = products[index];
                   return _buildProductCard(product);
                 },
@@ -462,18 +466,15 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
     );
   }
 
-  Widget _buildProductCard(ProductDashboardItem product) {
+  Widget _buildProductCard(ProductItem product) {
     return GestureDetector(
       onTap: () {
-        if (product.hasCart) {
-          // Navigate to product detail screen with cart functionality
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ProductDetailCartScreen(product: product),
-            ),
-          );
-        }
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailCartScreen(product: product),
+          ),
+        );
       },
       child: Container(
         decoration: BoxDecoration(
@@ -591,7 +592,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
 
 // Product Detail Screen with Cart functionality
 class ProductDetailCartScreen extends StatefulWidget {
-  final ProductDashboardItem product;
+  final ProductItem product;
 
   const ProductDetailCartScreen({super.key, required this.product});
 
@@ -911,20 +912,20 @@ class CategoryItem {
   });
 }
 
-class ProductDashboardItem {
+class ProductItem {
   final String name;
   final String weight;
+  final String price;
   final String status;
   final Color statusColor;
   final String imagePath;
-  final bool hasCart;
 
-  ProductDashboardItem({
+  ProductItem({
     required this.name,
     required this.weight,
+    required this.price,
     required this.status,
     required this.statusColor,
     required this.imagePath,
-    required this.hasCart,
   });
 }

@@ -5,6 +5,8 @@ import 'product_dashboard_screen.dart'; // Import the ProductDashboardScreen
 import 'customer_reviews_screen.dart'; // Import the CustomerReviewsScreen
 import 'package:prd_tubes/features/market/sales-analysis.dart';
 import 'package:prd_tubes/features/finance/finance.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 class TokoProfileScreen extends StatefulWidget {
   const TokoProfileScreen({super.key});
 
@@ -16,26 +18,45 @@ class _TokoProfileScreenState extends State<TokoProfileScreen> {
   int selectedTab = 0; // 0 for Terbaru, 1 for Terlaris
   int selectedCategory = -1; // -1 berarti tidak ada yang dipilih, 0 = Buah, 1 = Sayur, 2 = Lainnya
 
-  final List<ProductItem> products = [
-    ProductItem(
-      name: 'Tomat Ciawi',
-      weight: '1 Kg',
-      price: 'Rp 15,000',
-      imagePath: 'assets/image/tomat.jpeg',
-    ),
-    ProductItem(
-      name: 'Terong Penyamaran',
-      weight: '50 Kg',
-      price: 'Rp 25,000',
-      imagePath: 'assets/image/terong.jpg',
-    ),
-    ProductItem(
-      name: 'Jati Ambon',
-      weight: '130 Kg',
-      price: 'Rp 85,000',
-      imagePath: 'assets/image/kayujati.jpg',
-    ),
-  ];
+  List<ProductItem> products = []; // Empty list initially
+  bool isLoading = true; // To show loading state
+  final SupabaseClient supabase = Supabase.instance.client;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProducts();
+  }
+
+  Future<void> _loadProducts() async {
+    try {
+      print('Loading products...');
+      print('Current user ID: ${supabase.auth.currentUser?.id}');
+
+      final response = await supabase
+          .from('products')
+          .select()
+          .eq('uid', supabase.auth.currentUser?.id ?? '');
+
+      print('Response: $response');
+      print('Number of products: ${response.length}');
+
+      setState(() {
+        products = response.map<ProductItem>((product) => ProductItem(
+          name: product['product_name'] ?? '',
+          weight: '${product['stok']} kg',
+          price: 'Rp ${product['price'] ?? 0}',
+          status: product['stok'] > 0 ? 'Tersedia' : 'Habis',
+          statusColor: product['stok'] > 0 ? Colors.green : Colors.red,
+          imagePath: product['image_url'] ?? 'assets/default_product.png',
+        )).toList();
+        isLoading = false;
+      });
+    } catch (e) {
+      print('Error loading products: $e');
+      setState(() => isLoading = false);
+    }
+  }
 
   // Data kategori
   final List<Map<String, dynamic>> categories = [
@@ -540,8 +561,15 @@ class _TokoProfileScreenState extends State<TokoProfileScreen> {
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
                       ),
-                      itemCount: products.length,
+                      itemCount: isLoading ? 1 : products.length + 1,
                       itemBuilder: (context, index) {
+                        if (isLoading) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                        if (index == products.length) {
+                          // This would be your "Add Product" button if you want one
+                          return Container(); // or your add product widget
+                        }
                         final product = products[index];
                         return _buildProductCard(product);
                       },
@@ -755,38 +783,107 @@ class _TokoProfileScreenState extends State<TokoProfileScreen> {
         children: [
           Expanded(
             flex: 3,
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
-              ),
-              child: Image.asset(
-                product.imagePath,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
+            child: Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
+                  ),
+                  child: product.imagePath.startsWith('http')
+                      ? Image.network(
+                    product.imagePath,
                     width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Colors.green.shade100,
+                              Colors.green.shade200,
+                            ],
+                          ),
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.eco,
+                            color: Colors.green.shade400,
+                            size: 32,
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                      : Image.asset(
+                    product.imagePath,
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Colors.green.shade100,
+                              Colors.green.shade200,
+                            ],
+                          ),
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.eco,
+                            color: Colors.green.shade400,
+                            size: 32,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+                // Status Badge
+                Positioned(
+                  top: 6,
+                  left: 6,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Colors.green.shade100,
-                          Colors.green.shade200,
-                        ],
+                      color: product.statusColor,
+                      borderRadius: BorderRadius.circular(4),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 2,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      product.status,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 9,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Poppins',
                       ),
                     ),
-                    child: Icon(
-                      Icons.eco,
-                      color: Colors.green.shade400,
-                      size: 35,
-                    ),
-                  );
-                },
-              ),
+                  ),
+                ),
+              ],
             ),
           ),
+
           Expanded(
             flex: 2,
             child: Padding(
@@ -915,12 +1012,16 @@ class ProductItem {
   final String name;
   final String weight;
   final String price;
+  final String status;
+  final Color statusColor;
   final String imagePath;
 
   ProductItem({
     required this.name,
     required this.weight,
     required this.price,
+    required this.status,
+    required this.statusColor,
     required this.imagePath,
   });
 }
