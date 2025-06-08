@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProductDashboardScreen extends StatefulWidget {
   const ProductDashboardScreen({super.key});
@@ -39,9 +40,15 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
     ),
   ];
 
-  List<ProductItem> products = [];
-  bool isLoading = true;
+  int selectedTab = 0; // 0 for Terbaru, 1 for Terlaris
+  int selectedCategory = -1; // -1 berarti tidak ada yang dipilih, 0 = Buah, 1 = Sayur, 2 = Lainnya
+
+  List<ProductItem> products = []; // Empty list initially
+  bool isLoading = true; // To show loading state
   final SupabaseClient supabase = Supabase.instance.client;
+
+  int availableProductsCount = 0;
+  double totalStockKg = 0;
 
   @override
   void initState() {
@@ -51,20 +58,31 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
 
   Future<void> _loadProducts() async {
     try {
+      print('Loading products...');
+      print('Current user ID: ${supabase.auth.currentUser?.id}');
+
       final response = await supabase
           .from('products')
           .select()
           .eq('uid', supabase.auth.currentUser?.id ?? '');
 
+      print('Response: $response');
+      print('Number of products: ${response.length}');
+
       setState(() {
         products = response.map<ProductItem>((product) => ProductItem(
           name: product['product_name'] ?? '',
+          deskripsi: product['product_description'] ?? '',
           weight: '${product['stok']} kg',
           price: 'Rp ${product['price'] ?? 0}',
-          status: product['stok'] > 0 ? 'Available' : 'Habis',
-          statusColor: product['stok'] > 0 ? Color(0xFF3C5232) : Colors.red,
-          imagePath: product['image_url'] ?? 'assets/default_product.png',
+          status: product['stok'] > 0 ? 'Tersedia' : 'Habis',
+          statusColor: product['stok'] > 0 ? Colors.green : Colors.red,
+          imagePath: product['image_url'] ?? '',
         )).toList();
+
+        availableProductsCount = response.where((product) => product['stok'] > 0).length;
+        totalStockKg = response.fold(0.0, (sum, product) => sum + (product['stok'] ?? 0).toDouble());
+
         isLoading = false;
       });
     } catch (e) {
@@ -231,8 +249,8 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
                       Expanded(
                         child: _buildStatCard(
                           'Produk Tersedia',
-                          '4\nproduk',
-                          '24 kg total',
+                          '$availableProductsCount\nproduk',
+                          '${totalStockKg.toInt()} kg total',
                           Color(0xFF3C5232),
                         ),
                       ),
@@ -240,7 +258,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
                       Expanded(
                         child: _buildStatCard(
                           'Stok Bulan Ini',
-                          '311 kg',
+                          '${totalStockKg.toInt()} kg',
                           '',
                           Color(0xFF3C5232),
                         ),
@@ -287,15 +305,18 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 0.85,
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
                 ),
-                itemCount: isLoading ? 1 : products.length,
+                itemCount: isLoading ? 1 : products.length + 1,
                 itemBuilder: (context, index) {
                   if (isLoading) {
                     return Center(child: CircularProgressIndicator());
                   }
-
+                  if (index == products.length) {
+                    // This would be your "Add Product" button if you want one
+                    return Container(); // or your add product widget
+                  }
                   final product = products[index];
                   return _buildProductCard(product);
                 },
@@ -355,7 +376,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
                     ),
                   ),
                   child: const Text(
-                    'Tambah Produk',
+                    'Update Produk',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 14,
@@ -472,7 +493,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProductDetailCartScreen(product: product),
+            builder: (context) => ProductDetailScreen(product: product),
           ),
         );
       },
@@ -501,7 +522,24 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
                         topLeft: Radius.circular(8),
                         topRight: Radius.circular(8),
                       ),
-                      child: Image.asset(
+                      child: product.imagePath.isEmpty
+                          ? Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            topRight: Radius.circular(8),
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.eco,
+                          color: Color(0xFF3C5232),
+                          size: 30,
+                        ),
+                      )
+                          : Image.network(
                         product.imagePath,
                         width: double.infinity,
                         height: double.infinity,
@@ -579,6 +617,15 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
                         fontFamily: 'Poppins',
                       ),
                     ),
+                    Text(
+                      product.price,
+                      style: const TextStyle(
+                        color: Color(0xFF2E7D32),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -590,19 +637,17 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
   }
 }
 
-// Product Detail Screen with Cart functionality
-class ProductDetailCartScreen extends StatefulWidget {
+// Product Detail Screen - Seller focused
+class ProductDetailScreen extends StatefulWidget {
   final ProductItem product;
 
-  const ProductDetailCartScreen({super.key, required this.product});
+  const ProductDetailScreen({super.key, required this.product});
 
   @override
-  State<ProductDetailCartScreen> createState() => _ProductDetailCartScreenState();
+  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
 }
 
-class _ProductDetailCartScreenState extends State<ProductDetailCartScreen> {
-  int quantity = 1;
-
+class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -638,7 +683,25 @@ class _ProductDetailCartScreenState extends State<ProductDetailCartScreen> {
                         bottomLeft: Radius.circular(24),
                         bottomRight: Radius.circular(24),
                       ),
-                      child: Image.asset(
+                      child: widget.product.imagePath.isEmpty
+                          ? Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Colors.green.shade100,
+                              Colors.green.shade200,
+                            ],
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.eco,
+                          color: Color(0xFF3C5232),
+                          size: 80,
+                        ),
+                      )
+                          : Image.network(
                         widget.product.imagePath,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
@@ -682,7 +745,7 @@ class _ProductDetailCartScreenState extends State<ProductDetailCartScreen> {
                       ),
                     ),
                   ),
-                  // Back button
+                  // Back button and actions
                   SafeArea(
                     child: Padding(
                       padding: const EdgeInsets.all(16),
@@ -698,8 +761,10 @@ class _ProductDetailCartScreenState extends State<ProductDetailCartScreen> {
                           ),
                           const Spacer(),
                           IconButton(
-                            icon: const Icon(Icons.favorite_border, color: Colors.white),
-                            onPressed: () {},
+                            icon: const Icon(Icons.edit, color: Colors.white),
+                            onPressed: () {
+                              // Navigate to edit product screen
+                            },
                             style: IconButton.styleFrom(
                               backgroundColor: Colors.black.withOpacity(0.3),
                               padding: const EdgeInsets.all(8),
@@ -757,14 +822,28 @@ class _ProductDetailCartScreenState extends State<ProductDetailCartScreen> {
 
                   const SizedBox(height: 4),
 
-                  Text(
-                    widget.product.weight,
-                    style: TextStyle(
-                      color: Colors.green.shade600,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Poppins',
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        widget.product.weight,
+                        style: TextStyle(
+                          color: Colors.green.shade600,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
+                      Text(
+                        widget.product.price,
+                        style: const TextStyle(
+                          color: Colors.black87,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
+                    ],
                   ),
 
                   const SizedBox(height: 20),
@@ -783,112 +862,72 @@ class _ProductDetailCartScreenState extends State<ProductDetailCartScreen> {
                   const SizedBox(height: 8),
 
                   Text(
-                    'Produk segar berkualitas tinggi dari petani lokal. Cocok untuk berbagai kebutuhan masakan dan konsumsi sehari-hari.',
+                    widget.product.deskripsi,
                     style: TextStyle(
                       color: Colors.grey.shade600,
-                      fontSize: 14,
-                      height: 1.5,
+                      fontSize: 12,
                       fontFamily: 'Poppins',
                     ),
                   ),
 
                   const SizedBox(height: 20),
 
-                  // Quantity selector
-                  Row(
-                    children: [
-                      const Text(
-                        'Jumlah:',
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Poppins',
-                        ),
-                      ),
-                      const Spacer(),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.grey.shade300),
-                        ),
-                        child: Row(
+                  // Product stats
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey.shade200),
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            IconButton(
-                              icon: const Icon(Icons.remove),
-                              onPressed: quantity > 1 ? () {
-                                setState(() => quantity--);
-                              } : null,
-                              color: Colors.grey.shade600,
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
-                              child: Text(
-                                '$quantity',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Poppins',
-                                ),
+                            Text(
+                              'Total Views',
+                              style: TextStyle(
+                                color: Colors.grey.shade600,
+                                fontSize: 14,
+                                fontFamily: 'Poppins',
                               ),
                             ),
-                            IconButton(
-                              icon: const Icon(Icons.add),
-                              onPressed: () {
-                                setState(() => quantity++);
-                              },
-                              color: Color(0xFF3C5232),
+                            const Text(
+                              '125',
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Poppins',
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-
-                  const Spacer(),
-
-
-                  // Add to cart button
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Add to cart functionality
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('$quantity ${widget.product.name} ditambahkan ke keranjang'),
-                            backgroundColor: Color(0xFF3C5232),
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF3C5232),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Iconsax.shopping_cart,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 8),
-                          const Text(
-                            'Tambah ke Keranjang',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Poppins',
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Terjual Bulan Ini',
+                              style: TextStyle(
+                                color: Colors.grey.shade600,
+                                fontSize: 14,
+                                fontFamily: 'Poppins',
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                            const Text(
+                              '12 kg',
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -917,6 +956,7 @@ class ProductItem {
   final String weight;
   final String price;
   final String status;
+  final String deskripsi;
   final Color statusColor;
   final String imagePath;
 
@@ -927,5 +967,6 @@ class ProductItem {
     required this.status,
     required this.statusColor,
     required this.imagePath,
+    required this.deskripsi,
   });
 }

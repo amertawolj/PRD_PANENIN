@@ -17,6 +17,7 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
   final TextEditingController namaController = TextEditingController();
   final TextEditingController deskripsiController = TextEditingController();
   final TextEditingController kuantitasController = TextEditingController();
+  final TextEditingController tanggalTanamController = TextEditingController();
   final TextEditingController tanggalPanenController = TextEditingController();
   final TextEditingController hariController = TextEditingController();
   final TextEditingController bulanController = TextEditingController();
@@ -52,7 +53,35 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
     }
   }
 
-  Future<void> _selectDate(BuildContext context) async {
+  Future<void> _selectTanggalTanam() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2030),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Colors.green.shade600,
+              onPrimary: Colors.white,
+              surface: Colors.white,
+              onSurface: Colors.black,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null) {
+      setState(() {
+        tanggalTanamController.text =
+        "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
+      });
+    }
+  }
+
+  Future<void> _selectTanggalPanen() async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -542,6 +571,65 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
 
                   const SizedBox(height: 20),
 
+                  // Tanggal Tanam field
+                  Text(
+                    'Tanggal Tanam',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Poppins',
+                      color: Colors.grey.shade800,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Sesuaikan waktu tanam dan panen, dapatkan notifikasi ketika waktu panen sudah dekat',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'Poppins',
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  GestureDetector(
+                    onTap: () => _selectTanggalTanam(),
+                    child: AbsorbPointer(
+                      child: TextField(
+                        controller: tanggalTanamController,
+                        decoration: InputDecoration(
+                          hintText: 'HH/BB/TTTT',
+                          hintStyle: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 14,
+                            fontFamily: 'Poppins',
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          suffixIcon: Icon(
+                            Icons.calendar_today,
+                            color: Colors.green.shade600,
+                            size: 20,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.green.shade400, width: 2),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
                   // Tanggal Panen field
                   Text(
                     'Tanggal Panen',
@@ -554,7 +642,7 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                   ),
                   const SizedBox(height: 8),
                   GestureDetector(
-                    onTap: () => _selectDate(context),
+                    onTap: () => _selectTanggalPanen(),
                     child: AbsorbPointer(
                       child: TextField(
                         controller: tanggalPanenController,
@@ -910,6 +998,7 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                         int months = int.tryParse(bulanController.text) ?? 0;
                         int years = int.tryParse(tahunController.text) ?? 0;
 
+                        DateTime tanamDate = DateTime.parse(tanggalTanamController.text.split('/').reversed.join('-'));
                         DateTime harvestDate = DateTime.parse(tanggalPanenController.text.split('/').reversed.join('-'));
                         DateTime expiryDate = DateTime(
                           harvestDate.year + years,
@@ -921,6 +1010,7 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                           nama: namaController.text,
                           deskripsi: deskripsiController.text,
                           moq: double.tryParse(kuantitasController.text) ?? 0.0,
+                          tanam: tanamDate,
                           panen: harvestDate,
                           harga: int.tryParse(hargaController.text) ?? 0,
                           penyimpanan: selectedPenyimpanan.join(', '),
