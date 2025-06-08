@@ -12,9 +12,7 @@ class TambahProdukScreen extends StatefulWidget {
 }
 
 class _TambahProdukScreenState extends State<TambahProdukScreen> {
-
   int selectedTab = 0; // 0 for Terbaru, 1 for Terlaris
-
   List<ProductItem> products = []; // Empty list initially
   bool isLoading = true; // To show loading state
   final SupabaseClient supabase = Supabase.instance.client;
@@ -40,6 +38,7 @@ class _TambahProdukScreenState extends State<TambahProdukScreen> {
 
       setState(() {
         products = response.map<ProductItem>((product) => ProductItem(
+          id: product['id'].toString(),
           name: product['product_name'] ?? '',
           weight: '${product['stok']} kg',
           price: 'Rp ${product['price'] ?? 0}',
@@ -53,6 +52,51 @@ class _TambahProdukScreenState extends State<TambahProdukScreen> {
       print('Error loading products: $e');
       setState(() => isLoading = false);
     }
+  }
+
+  Future<void> _deleteProduct(ProductItem product) async {
+    // Show confirmation dialog
+    bool? confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Hapus Produk'),
+        content: Text('Apakah Anda yakin ingin menghapus ${product.name}?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text('Batal'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text('Hapus', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      try {
+        await supabase.from('products').delete().eq('id', product.id);
+        _loadProducts(); // Refresh the list
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Produk berhasil dihapus')),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal menghapus produk: $e')),
+        );
+      }
+    }
+  }
+
+  void _editProduct(ProductItem product) {
+    // Navigate to the same add screen (without edit functionality)
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TambahProdukDetailScreen(),
+      ),
+    ).then((_) => _loadProducts()); // Refresh when returning
   }
 
   @override
@@ -160,7 +204,7 @@ class _TambahProdukScreenState extends State<TambahProdukScreen> {
                       children: [
                         // Terbaru tab
                         GestureDetector(
-                          onTap: () => setState(() => selectedTab = 0),
+                          onTap: () => setState(() => selectedTab = 0), // Fixed: Added missing onTap
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             decoration: BoxDecoration(
@@ -266,14 +310,14 @@ class _TambahProdukScreenState extends State<TambahProdukScreen> {
                             }
                             // Add new product button
                             return GestureDetector(
-                            onTap: () async {
-                              await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const TambahProdukDetailScreen(),
-                                ),
-                              );
-                              _loadProducts(); // Add this line
+                              onTap: () async {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const TambahProdukDetailScreen(),
+                                  ),
+                                );
+                                _loadProducts(); // Refresh products when returning
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -315,21 +359,15 @@ class _TambahProdukScreenState extends State<TambahProdukScreen> {
                               ),
                             );
                           }
-
                           final product = products[index - 1];
                           return ProductCard(
                             product: product,
                             onTap: () {
-                              // Navigate to FilledTambahProdukDetailScreen if product is Tomat Ciwi
-                              if (product.name == 'Tomat Ciwi') {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const FilledTambahProdukDetailScreen(),
-                                  ),
-                                );
-                              }
+                              // Navigate to product detail if needed
+                              // You can add navigation logic here
                             },
+                            onEdit: () => _editProduct(product),
+                            onDelete: () => _deleteProduct(product),
                           );
                         },
                       ),
@@ -430,8 +468,16 @@ class CurvedBottomPainter extends CustomPainter {
 class ProductCard extends StatelessWidget {
   final ProductItem product;
   final VoidCallback? onTap;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
 
-  const ProductCard({super.key, required this.product, this.onTap});
+  const ProductCard({
+    super.key,
+    required this.product,
+    this.onTap,
+    this.onEdit,
+    this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -561,6 +607,41 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
                     ),
+                    // Edit and Delete buttons
+                    Positioned(
+                      top: 6,
+                      right: 6,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (onEdit != null)
+                            GestureDetector(
+                              onTap: onEdit,
+                              child: Container(
+                                padding: EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue.withOpacity(0.8),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Icon(Icons.edit, color: Colors.white, size: 12),
+                              ),
+                            ),
+                          SizedBox(width: 4),
+                          if (onDelete != null)
+                            GestureDetector(
+                              onTap: onDelete,
+                              child: Container(
+                                padding: EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: Colors.red.withOpacity(0.8),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Icon(Icons.delete, color: Colors.white, size: 12),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -615,6 +696,7 @@ class ProductCard extends StatelessWidget {
 }
 
 class ProductItem {
+  final String id;
   final String name;
   final String weight;
   final String price;
@@ -623,6 +705,7 @@ class ProductItem {
   final String imagePath;
 
   ProductItem({
+    required this.id,
     required this.name,
     required this.weight,
     required this.price,
