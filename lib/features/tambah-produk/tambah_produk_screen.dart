@@ -94,9 +94,12 @@ class _TambahProdukScreenState extends State<TambahProdukScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => TambahProdukDetailScreen(),
+        builder: (context) => TambahProdukDetailScreen(
+          productData: product.toMap(), // Your product data map
+          isEditing: true,
+        ),
       ),
-    ).then((_) => _loadProducts()); // Refresh when returning
+    );
   }
 
   @override
@@ -704,6 +707,15 @@ class ProductItem {
   final Color statusColor;
   final String imagePath;
 
+  // Tambahan field untuk form/detail
+  final String? description;
+  final double? moq;
+  final String? category;
+  final DateTime? tanamDate;
+  final DateTime? panenDate;
+  final DateTime? kadaluarsaDate;
+  final List<String>? penyimpanan;
+
   ProductItem({
     required this.id,
     required this.name,
@@ -712,5 +724,48 @@ class ProductItem {
     required this.status,
     required this.statusColor,
     required this.imagePath,
+    this.description,
+    this.moq,
+    this.category,
+    this.tanamDate,
+    this.panenDate,
+    this.kadaluarsaDate,
+    this.penyimpanan,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'nama': name,
+      'deskripsi': description,
+      'stok': int.tryParse(weight.replaceAll(' kg', '')) ?? 0,
+      'harga': int.tryParse(price.replaceAll('Rp ', '').replaceAll(',', '')) ?? 0,
+      'moq': moq,
+      'kategori': category,
+      'tanam': tanamDate?.toIso8601String(),
+      'panen': panenDate?.toIso8601String(),
+      'kadaluarsa': kadaluarsaDate?.toIso8601String(),
+      'penyimpanan': penyimpanan?.join(', '),
+      'image_url': imagePath,
+    };
+  }
+
+  factory ProductItem.fromMap(Map<String, dynamic> map) {
+    return ProductItem(
+      id: map['id'],
+      name: map['nama'],
+      weight: "${map['stok']} kg",
+      price: "Rp ${map['harga']}",
+      status: 'Tersedia',
+      statusColor: Colors.green,
+      imagePath: map['image_url'] ?? '',
+      description: map['deskripsi'],
+      moq: (map['moq'] as num?)?.toDouble(),
+      category: map['kategori'],
+      tanamDate: map['tanam'] != null ? DateTime.parse(map['tanam']) : null,
+      panenDate: map['panen'] != null ? DateTime.parse(map['panen']) : null,
+      kadaluarsaDate: map['kadaluarsa'] != null ? DateTime.parse(map['kadaluarsa']) : null,
+      penyimpanan: map['penyimpanan']?.toString().split(', '),
+    );
+  }
 }

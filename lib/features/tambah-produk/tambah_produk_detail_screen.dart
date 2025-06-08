@@ -5,7 +5,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:prd_tubes/services/product_service.dart';
 
 class TambahProdukDetailScreen extends StatefulWidget {
-  const TambahProdukDetailScreen({super.key});
+  final Map<String, dynamic>? productData;
+  final bool isEditing;
+
+  const TambahProdukDetailScreen({
+    super.key,
+    this.productData,
+    this.isEditing = false,
+  });
 
   @override
   State<TambahProdukDetailScreen> createState() => _TambahProdukDetailScreenState();
@@ -39,6 +46,44 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
     'Hindari Sinar Matahari',
     'Wadah Kedap Udara'
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isEditing && widget.productData != null) {
+      _populateFields();
+    }
+  }
+
+  void _populateFields() {
+    final data = widget.productData!;
+
+    namaController.text = data['nama'] ?? '';
+    deskripsiController.text = data['deskripsi'] ?? '';
+    hargaController.text = data['harga']?.toString() ?? '';
+    stokController.text = data['stok']?.toString() ?? '';
+    kuantitasController.text = data['moq']?.toString() ?? '';
+    selectedCategory = data['kategori'] ?? 'Buah';
+
+    // Handle dates
+    if (data['tanam'] != null) {
+      DateTime tanam = DateTime.parse(data['tanam']);
+      tanggalTanamController.text = "${tanam.day.toString().padLeft(2, '0')}/${tanam.month.toString().padLeft(2, '0')}/${tanam.year}";
+    }
+
+    if (data['panen'] != null) {
+      DateTime panen = DateTime.parse(data['panen']);
+      tanggalPanenController.text = "${panen.day.toString().padLeft(2, '0')}/${panen.month.toString().padLeft(2, '0')}/${panen.year}";
+    }
+
+    // Handle penyimpanan (split comma-separated string back to list)
+    if (data['penyimpanan'] != null) {
+      selectedPenyimpanan = data['penyimpanan'].split(', ');
+    }
+
+    // Calculate and populate expiry duration if needed
+    // You'll need to reverse-calculate from kadaluarsa date
+  }
 
   //image picker
   final ImagePicker _picker = ImagePicker();
@@ -163,8 +208,8 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black87),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'Tambah Produk',
+        title: Text(
+          widget.isEditing ? 'Edit Produk' : 'Tambah Produk',
           style: TextStyle(
             color: Colors.black87,
             fontSize: 18,
@@ -993,36 +1038,112 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                   child: ElevatedButton(
                     onPressed: () async {
                       try {
-                        // Calculate expiry date
+                        if (namaController.text.trim().isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Nama produk harus diisi')),
+                          );
+                          return;
+                        }
+
+                        if (deskripsiController.text.trim().isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Deskripsi produk harus diisi')),
+                          );
+                          return;
+                        }
+
+                        if (hargaController.text.trim().isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Harga harus diisi')),
+                          );
+                          return;
+                        }
+
+                        if (stokController.text.trim().isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Stok harus diisi')),
+                          );
+                          return;
+                        }
+
+                        if (kuantitasController.text.trim().isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Kuantitas minimum harus diisi')),
+                          );
+                          return;
+                        }
+
+                        if (selectedPenyimpanan.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Pilih minimal satu cara penyimpanan')),
+                          );
+                          return;
+                        }
+                        // Ambil input tanggal dan hitung tanggal kadaluarsa
                         int days = int.tryParse(hariController.text) ?? 0;
                         int months = int.tryParse(bulanController.text) ?? 0;
                         int years = int.tryParse(tahunController.text) ?? 0;
 
-                        DateTime tanamDate = DateTime.parse(tanggalTanamController.text.split('/').reversed.join('-'));
-                        DateTime harvestDate = DateTime.parse(tanggalPanenController.text.split('/').reversed.join('-'));
-                        DateTime expiryDate = DateTime(
-                          harvestDate.year + years,
-                          harvestDate.month + months,
-                          harvestDate.day + days,
-                        );
+                        // Handle tanggal tanam (optional)
+                        DateTime? tanamDate;
+                        if (tanggalTanamController.text.isNotEmpty) {
+                          tanamDate = DateTime.parse(tanggalTanamController.text.split('/').reversed.join('-'));
+                        }
 
-                        await _productService.uploadProduct(
-                          nama: namaController.text,
-                          deskripsi: deskripsiController.text,
-                          moq: double.tryParse(kuantitasController.text) ?? 0.0,
-                          tanam: tanamDate,
-                          panen: harvestDate,
-                          harga: int.tryParse(hargaController.text) ?? 0,
-                          penyimpanan: selectedPenyimpanan.join(', '),
-                          kategori: selectedCategory,
-                          kadaluarsa: expiryDate,
-                          stok: int.tryParse(stokController.text) ?? 0,
-                          imageFile: _pickedImage != null ? File(_pickedImage!.path) : null,
-                        );
+                        // Handle tanggal panen (optional)
+                        DateTime? harvestDate;
+                        if (tanggalPanenController.text.isNotEmpty) {
+                          harvestDate = DateTime.parse(tanggalPanenController.text.split('/').reversed.join('-'));
+                        }
+
+                        // Calculate expiry date only if harvest date exists
+                        DateTime? expiryDate;
+                        if (harvestDate != null) {
+                          expiryDate = DateTime(
+                            harvestDate.year + years,
+                            harvestDate.month + months,
+                            harvestDate.day + days,
+                          );
+                        }
+
+                        if (widget.isEditing) {
+                          await _productService.updateProduct(
+                            id: widget.productData!['id'],
+                            nama: namaController.text,
+                            deskripsi: deskripsiController.text,
+                            moq: double.tryParse(kuantitasController.text) ?? 0.0,
+                            tanam: tanamDate, // Now nullable
+                            panen: harvestDate, // Now nullable
+                            harga: int.tryParse(hargaController.text) ?? 0,
+                            penyimpanan: selectedPenyimpanan.join(', '),
+                            kategori: selectedCategory,
+                            kadaluarsa: expiryDate, // Now nullable
+                            stok: int.tryParse(stokController.text) ?? 0,
+                            imageFile: _pickedImage != null ? File(_pickedImage!.path) : null,
+                          );
+                        } else {
+                          await _productService.uploadProduct(
+                            nama: namaController.text,
+                            deskripsi: deskripsiController.text,
+                            moq: double.tryParse(kuantitasController.text) ?? 0.0,
+                            tanam: tanamDate, // Now nullable
+                            panen: harvestDate, // Now nullable
+                            harga: int.tryParse(hargaController.text) ?? 0,
+                            penyimpanan: selectedPenyimpanan.join(', '),
+                            kategori: selectedCategory,
+                            kadaluarsa: expiryDate, // Now nullable
+                            stok: int.tryParse(stokController.text) ?? 0,
+                            imageFile: _pickedImage != null ? File(_pickedImage!.path) : null,
+                          );
+                        }
 
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Produk berhasil disimpan!')),
+                          SnackBar(
+                            content: Text(widget.isEditing
+                                ? 'Produk berhasil diperbarui!'
+                                : 'Produk berhasil disimpan!'),
+                          ),
                         );
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -1048,7 +1169,7 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                       ),
                     ),
                   ),
-                ),
+                )
               ],
             ),
           ),
