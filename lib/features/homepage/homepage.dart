@@ -14,7 +14,6 @@ import 'package:prd_tubes/features/orders/status_pesanan_screen.dart';
 import 'package:prd_tubes/features/tambah-produk/filled_tambah_produk_detail_screen.dart';
 import 'package:prd_tubes/features/tambah-produk/tambah_produk_detail_screen.dart';
 import 'package:prd_tubes/features/tambah-produk/tambah_produk_screen.dart';
-import 'package:prd_tubes/features/notifikasi/stock_notification-screen.dart';
 import 'package:prd_tubes/features/toko/toko_profile_screen.dart';
 
 class HomepageScreen extends StatefulWidget {
@@ -113,7 +112,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                   'Halo, User',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 18,
+                    fontSize: 24,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Poppins',
                   ),
@@ -547,14 +546,6 @@ class _HomepageScreenState extends State<HomepageScreen> {
         ),
       },
       {
-        'icon': Iconsax.chart_1,
-        'title': 'Prediksi\nharga',
-        'onTap': () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => PilihKategoriScreen()),
-        ),
-      },
-      {
         'icon': Iconsax.shopping_bag,
         'title': 'Pesanan',
         'onTap': () => Navigator.push(
@@ -563,19 +554,19 @@ class _HomepageScreenState extends State<HomepageScreen> {
         ),
       },
       {
-        'icon': Iconsax.home_2,
-        'title': 'Tambah\nPengingat',
-        'onTap': () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => StockNotificationScreen()),
-        ),
-      },
-      {
         'icon': Iconsax.add_circle,
         'title': 'Tambah\nproduk',
         'onTap': () => Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => TambahProdukScreen()),
+        ),
+      },
+      {
+        'icon': Iconsax.chart_1,
+        'title': 'Prediksi\nharga',
+        'onTap': () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PilihKategoriScreen()),
         ),
       },
       {

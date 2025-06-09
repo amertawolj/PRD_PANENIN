@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:prd_tubes/features/notifikasi/stock_notification-screen.dart';
 
 // Import your existing feature screens
 import 'package:prd_tubes/features/profile/profile.dart';
@@ -15,7 +14,6 @@ import 'package:prd_tubes/features/tambah-produk/filled_tambah_produk_detail_scr
 import 'package:prd_tubes/features/tambah-produk/tambah_produk_detail_screen.dart';
 import 'package:prd_tubes/features/tambah-produk/tambah_produk_screen.dart';
 import 'package:prd_tubes/features/toko/toko_profile_screen.dart';
-import 'package:prd_tubes/features/notifikasi/stock_notification-screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -263,11 +261,6 @@ class _SeeAllFeaturesScreenState extends State<SeeAllFeaturesScreen> {
           MaterialPageRoute(builder: (context) => PilihKategoriScreen()),
         );
         break;
-      case 'Tambah Pengingat':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => StockNotificationScreen()),
-        );
       case 'Toko':
         Navigator.push(
           context,
@@ -564,13 +557,6 @@ class NavigationHelper {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const TokoProfileScreen()),
-    );
-  }
-
-  static void navigateToPengingat(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => StockNotificationScreen()),
     );
   }
 

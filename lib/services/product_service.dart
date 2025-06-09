@@ -8,7 +8,7 @@ class ProductService {
     required String nama,
     required String deskripsi,
     required double moq,
-    DateTime? panen,     // <-- nullable sekarang
+    DateTime? panen,     // <-- nullable
     DateTime? tanam,     // <-- nullable
     required int harga,
     required String penyimpanan,
