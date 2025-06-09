@@ -3,6 +3,7 @@ import 'package:iconsax/iconsax.dart';
 import 'tambah_produk_detail_screen.dart';
 import 'filled_tambah_produk_detail_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:intl/intl.dart';
 
 class TambahProdukScreen extends StatefulWidget {
   const TambahProdukScreen({super.key});
@@ -16,6 +17,12 @@ class _TambahProdukScreenState extends State<TambahProdukScreen> {
   List<ProductItem> products = []; // Empty list initially
   bool isLoading = true; // To show loading state
   final SupabaseClient supabase = Supabase.instance.client;
+
+  final NumberFormat currencyFormat = NumberFormat.currency(
+    locale: 'id_ID',
+    symbol: 'Rp ',
+    decimalDigits: 0,
+  );
 
   @override
   void initState() {
@@ -41,7 +48,7 @@ class _TambahProdukScreenState extends State<TambahProdukScreen> {
           id: product['id'].toString(),
           name: product['product_name'] ?? '',
           weight: '${product['stok']} kg',
-          price: 'Rp ${product['price'] ?? 0}',
+          price: NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0).format(product['price'] ?? 0),
           status: product['stok'] > 0 ? 'Tersedia' : 'Habis',
           statusColor: product['stok'] > 0 ? Colors.green : Colors.red,
           imagePath: product['image_url'] ?? 'assets/default_product.png',
@@ -663,7 +670,7 @@ class ProductCard extends StatelessWidget {
                       product.name,
                       style: const TextStyle(
                         color: Colors.black87,
-                        fontSize: 11,
+                        fontSize: 12,
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Poppins',
                       ),
@@ -674,7 +681,7 @@ class ProductCard extends StatelessWidget {
                       product.weight,
                       style: TextStyle(
                         color: Colors.grey.shade600,
-                        fontSize: 9,
+                        fontSize: 11,
                         fontFamily: 'Poppins',
                       ),
                     ),
@@ -682,7 +689,7 @@ class ProductCard extends StatelessWidget {
                       product.price,
                       style: const TextStyle(
                         color: Color(0xFF2E7D32),
-                        fontSize: 11,
+                        fontSize: 12,
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Poppins',
                       ),
@@ -755,7 +762,7 @@ class ProductItem {
       id: map['id'],
       name: map['nama'],
       weight: "${map['stok']} kg",
-      price: "Rp ${map['harga']}",
+      price: NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0).format(map['harga'] ?? 0),
       status: 'Tersedia',
       statusColor: Colors.green,
       imagePath: map['image_url'] ?? '',

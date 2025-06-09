@@ -6,6 +6,7 @@ import 'customer_reviews_screen.dart'; // Import the CustomerReviewsScreen
 import 'package:prd_tubes/features/market/sales-analysis.dart';
 import 'package:prd_tubes/features/finance/finance.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:intl/intl.dart';
 
 class TokoProfileScreen extends StatefulWidget {
   const TokoProfileScreen({super.key});
@@ -21,6 +22,12 @@ class _TokoProfileScreenState extends State<TokoProfileScreen> {
   List<ProductItem> products = []; // Empty list initially
   bool isLoading = true; // To show loading state
   final SupabaseClient supabase = Supabase.instance.client;
+
+  final NumberFormat currencyFormat = NumberFormat.currency(
+    locale: 'id_ID',
+    symbol: 'Rp ',
+    decimalDigits: 0,
+  );
 
   @override
   void initState() {
@@ -45,7 +52,7 @@ class _TokoProfileScreenState extends State<TokoProfileScreen> {
         products = response.map<ProductItem>((product) => ProductItem(
           name: product['product_name'] ?? '',
           weight: '${product['stok']} kg',
-          price: 'Rp ${product['price'] ?? 0}',
+          price: currencyFormat.format(product['price'] ?? 0),
           status: product['stok'] > 0 ? 'Tersedia' : 'Habis',
           statusColor: product['stok'] > 0 ? Colors.green : Colors.red,
           imagePath: product['image_url'] ?? 'assets/default_product.png',

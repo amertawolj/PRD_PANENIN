@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:prd_tubes/features/tambah-produk/tambah_produk_screen.dart';
+import 'package:intl/intl.dart';
 
 class ProductDashboardScreen extends StatefulWidget {
   const ProductDashboardScreen({super.key});
@@ -13,6 +14,12 @@ class ProductDashboardScreen extends StatefulWidget {
 class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
   int selectedFilterIndex = 0;
   int selectedCategoryIndex = -1; // -1 means no category selected
+
+  final NumberFormat currencyFormat = NumberFormat.currency(
+    locale: 'id_ID',
+    symbol: 'Rp ',
+    decimalDigits: 0,
+  );
 
   final List<String> filters = [
     'Semua',
@@ -74,7 +81,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
           name: product['product_name'] ?? '',
           deskripsi: product['product_description'] ?? '',
           weight: '${product['stok']} kg',
-          price: 'Rp ${product['price'] ?? 0}',
+          price: currencyFormat.format(product['price'] ?? 0),
           status: product['stok'] > 0 ? 'Tersedia' : 'Habis',
           statusColor: product['stok'] > 0 ? Colors.green : Colors.red,
           imagePath: product['image_url'] ?? '',

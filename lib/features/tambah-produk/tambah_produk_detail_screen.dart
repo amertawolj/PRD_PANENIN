@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:prd_tubes/services/product_service.dart';
+import 'package:intl/intl.dart';
 
 class TambahProdukDetailScreen extends StatefulWidget {
   final Map<String, dynamic>? productData;
@@ -31,6 +32,11 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
   final TextEditingController tahunController = TextEditingController();
   final TextEditingController hargaController = TextEditingController();
   final TextEditingController stokController = TextEditingController();
+  final NumberFormat currencyFormat = NumberFormat.currency(
+    locale: 'id_ID',
+    symbol: 'Rp ',
+    decimalDigits: 0,
+  );
 
   String selectedCategory = 'Buah';
   bool isPenyimpananDropdownOpen = false;
@@ -60,10 +66,14 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
 
     namaController.text = data['nama'] ?? '';
     deskripsiController.text = data['deskripsi'] ?? '';
-    hargaController.text = data['harga']?.toString() ?? '';
     stokController.text = data['stok']?.toString() ?? '';
     kuantitasController.text = data['moq']?.toString() ?? '';
     selectedCategory = data['kategori'] ?? 'Buah';
+    if (data['harga'] != null) {
+      hargaController.text = data['harga'].toString();
+    } else {
+      hargaController.text = '';
+    }
 
     // Handle dates
     if (data['tanam'] != null) {
@@ -460,6 +470,18 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                         child: TextField(
                           controller: hargaController,
                           keyboardType: TextInputType.number,
+                          onChanged: (value) {
+                            // Remove any non-digit characters
+                            String cleanValue = value.replaceAll(RegExp(r'[^\d]'), '');
+                            if (cleanValue.isNotEmpty) {
+                              int number = int.parse(cleanValue);
+                              String formatted = NumberFormat('#,###', 'id_ID').format(number);
+                              hargaController.value = TextEditingValue(
+                                text: formatted,
+                                selection: TextSelection.collapsed(offset: formatted.length),
+                              );
+                            }
+                          },
                           decoration: InputDecoration(
                             hintText: 'Masukkan harga',
                             hintStyle: const TextStyle(
@@ -1114,7 +1136,7 @@ class _TambahProdukDetailScreenState extends State<TambahProdukDetailScreen> {
                             moq: double.tryParse(kuantitasController.text) ?? 0.0,
                             tanam: tanamDate, // Now nullable
                             panen: harvestDate, // Now nullable
-                            harga: int.tryParse(hargaController.text) ?? 0,
+                            harga: int.tryParse(hargaController.text.replaceAll(RegExp(r'[^\d]'), '')) ?? 0,
                             penyimpanan: selectedPenyimpanan.join(', '),
                             kategori: selectedCategory,
                             kadaluarsa: expiryDate, // Now nullable
