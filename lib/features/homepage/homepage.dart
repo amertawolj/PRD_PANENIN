@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:prd_tubes/features/dashboard/dashboard.dart';
 
@@ -483,53 +484,71 @@ class _HomepageScreenState extends State<HomepageScreen> {
 
   Widget _buildBottomNavBar() {
     return Container(
-      height: 60,
       decoration: BoxDecoration(
         color: Colors.white,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(0),
+          topRight: Radius.circular(0),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 5,
+            color: Colors.black.withOpacity(0.1),
+            offset: const Offset(0, -2),
+            blurRadius: 10,
           ),
         ],
       ),
-      child: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.white,
-        selectedItemColor: const Color(0xFF4A5D23),
-        unselectedItemColor: Colors.grey,
-        selectedFontSize: 10,
-        unselectedFontSize: 10,
-        iconSize: 20,
-        currentIndex: _currentBottomNavIndex,
-        onTap: (index) {
-          setState(() {
-            _currentBottomNavIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            label: 'Beranda',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.inventory_2_outlined),
-            label: 'Produk',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.analytics_outlined),
-            label: 'Analisis',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message_outlined),
-            label: 'Pesan',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Pengaturan',
-          ),
-        ],
+      child: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.white,
+          selectedItemColor: const Color(0xFF4A5D23),
+          unselectedItemColor: const Color(0xFF9CA3AF),
+          selectedFontSize: 12,
+          unselectedFontSize: 10,
+          iconSize: 24,
+          elevation: 0,
+          currentIndex: _currentBottomNavIndex,
+          onTap: (index) {
+            setState(() {
+              _currentBottomNavIndex = index;
+            });
+            if (index == 0) Navigator.push(context, MaterialPageRoute(builder: (context) => HomepageScreen()));
+            if (index == 1) Navigator.push(context, MaterialPageRoute(builder: (context) => TambahProdukScreen()));
+            if (index == 2) Navigator.push(context, MaterialPageRoute(builder: (context) => OrderDashboardScreen()));
+          },
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined),
+              activeIcon: Icon(Icons.home),
+              label: 'Beranda',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.inventory_2_outlined),
+              activeIcon: Icon(Icons.store),
+              label: 'Toko',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.analytics_outlined),
+              activeIcon: Icon(Icons.shopping_bag),
+              label: 'Pesanan',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.message_outlined),
+              activeIcon: Icon(Icons.message),
+              label: 'Pesan',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_2_outlined),
+              activeIcon: Icon(Icons.person),
+              label: 'Profil',
+            ),
+          ],
+        ),
       ),
     );
   }
