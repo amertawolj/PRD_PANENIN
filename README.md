@@ -1,2 +1,3 @@
-PANENIN App V2
-Redesign from V1
+PRD_PANENIN
+
+this one is my first mobile app project so cmiiw...:D
