@@ -11,7 +11,6 @@ import 'package:prd_tubes/features/ai-tracker/pilihkategori.dart';
 import 'package:prd_tubes/features/orders/detail_komoditas_screen.dart';
 import 'package:prd_tubes/features/orders/order_dashboard_screen.dart';
 import 'package:prd_tubes/features/orders/status_pesanan_screen.dart';
-import 'package:prd_tubes/features/tambah-produk/filled_tambah_produk_detail_screen.dart';
 import 'package:prd_tubes/features/tambah-produk/tambah_produk_detail_screen.dart';
 import 'package:prd_tubes/features/tambah-produk/tambah_produk_screen.dart';
 import 'package:prd_tubes/features/toko/toko_profile_screen.dart';

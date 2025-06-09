@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:prd_tubes/features/tambah-produk/tambah_produk_screen.dart';
 
 class ProductDashboardScreen extends StatefulWidget {
   const ProductDashboardScreen({super.key});
@@ -365,7 +365,10 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Navigate to add product screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TambahProdukScreen()),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF3C5232),

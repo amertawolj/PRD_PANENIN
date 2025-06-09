@@ -125,7 +125,7 @@ class _TambahProdukScreenState extends State<TambahProdukScreen> {
                     ),
                     const SizedBox(width: 8),
                     const Text(
-                      'Tambah Produk',
+                      'Update Produk',
                       style: TextStyle(
                         color: Colors.black87,
                         fontSize: 16,
