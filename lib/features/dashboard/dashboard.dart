@@ -45,7 +45,6 @@ class SeeAllFeaturesScreen extends StatefulWidget {
 }
 
 class _SeeAllFeaturesScreenState extends State<SeeAllFeaturesScreen> {
-  int _currentBottomNavIndex = 0;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
@@ -148,7 +147,6 @@ class _SeeAllFeaturesScreenState extends State<SeeAllFeaturesScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: _buildBottomNavBar(),
     );
   }
 
@@ -231,7 +229,7 @@ class _SeeAllFeaturesScreenState extends State<SeeAllFeaturesScreen> {
 
   void _navigateToFeature(BuildContext context, String featureName) {
     switch (featureName) {
-      case 'Profil':
+      case 'Setelan':
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const profileScreen()),
@@ -261,6 +259,12 @@ class _SeeAllFeaturesScreenState extends State<SeeAllFeaturesScreen> {
           MaterialPageRoute(builder: (context) => PilihKategoriScreen()),
         );
         break;
+      case 'Pesanan':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => OrderDashboardScreen()),
+        );
+        break;
       case 'Toko':
         Navigator.push(
           context,
@@ -271,37 +275,6 @@ class _SeeAllFeaturesScreenState extends State<SeeAllFeaturesScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => FeatureScreen(featureName)),
-        );
-        break;
-    }
-  }
-
-  void _onBottomNavTap(int index) {
-    switch (index) {
-      case 0:
-        break;
-      case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => TambahProdukScreen()),
-        );
-        break;
-      case 2:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SalesAnalysisScreen()),
-        );
-        break;
-      case 3:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const profileScreen()),
-        );
-        break;
-      case 4:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const profileScreen()),
         );
         break;
     }
@@ -340,59 +313,6 @@ class _SeeAllFeaturesScreenState extends State<SeeAllFeaturesScreen> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildBottomNavBar() {
-    return Container(
-      height: 60,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 5,
-          ),
-        ],
-      ),
-      child: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.white,
-        selectedItemColor: const Color(0xFF4A5D23),
-        unselectedItemColor: Colors.grey,
-        selectedFontSize: 10,
-        unselectedFontSize: 10,
-        iconSize: 20,
-        currentIndex: _currentBottomNavIndex,
-        onTap: (index) {
-          setState(() {
-            _currentBottomNavIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            label: 'Beranda',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.inventory_2_outlined),
-            label: 'Produk',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.analytics_outlined),
-            label: 'Analisis',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message_outlined),
-            label: 'Pesan',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Pengaturan',
-          ),
-        ],
       ),
     );
   }
@@ -564,6 +484,13 @@ class NavigationHelper {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const PrediksiHargaScreen()),
+    );
+  }
+
+  static void navigateToPesanan(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const OrderDashboardScreen()),
     );
   }
 }
