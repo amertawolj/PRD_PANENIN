@@ -121,7 +121,7 @@ class _DaftarPageState extends State<DaftarPage> {
                           borderRadius: BorderRadius.circular(2),
                         ),
                         child: Image.asset(
-                          'assets/image/logopanenin.png',
+                          'assets/image/Group 35@2x.png',
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -140,13 +140,24 @@ class _DaftarPageState extends State<DaftarPage> {
                           // Logo illustration
                           Container(
                             width: 180,
-                            height: 180,
+                            height: 100,
                             child: Image.asset(
                               'assets/image/logopanenin.png',
                               fit: BoxFit.contain,
                             ),
                           ),
-                          SizedBox(height: 10),
+                          SizedBox(height: 4),
+
+                          Text(
+                            'PANENin',
+                            style: TextStyle(
+                              fontSize: 48,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontFamily: 'Fredoka',
+                            ),
+                          ),
+                          SizedBox(height: 8),
 
                           // Registration form
                           Container(

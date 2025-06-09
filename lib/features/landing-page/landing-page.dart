@@ -59,7 +59,7 @@ class LandingPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(2),
                         ),
                         child: Image.asset(
-                          'assets/image/logopanenin.png',
+                          'assets/image/Group 35@2x.png',
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -75,8 +75,8 @@ class LandingPage extends StatelessWidget {
                       children: [
                         // Main logo/illustration
                         Container(
-                          width: 200,
-                          height: 100,
+                          width: 350,
+                          height: 180,
                           child: Image.asset(
                             'assets/image/logopanenin.png',
                             fit: BoxFit.contain,
@@ -88,7 +88,7 @@ class LandingPage extends StatelessWidget {
                         Text(
                           'PANENin',
                           style: TextStyle(
-                            fontSize: 48,
+                            fontSize: 56,
                             fontWeight: FontWeight.bold,
                             color: Colors.black87,
                             fontFamily: 'Fredoka',
@@ -106,7 +106,7 @@ class LandingPage extends StatelessWidget {
                             fontFamily: 'Poppins',
                           ),
                         ),
-                        SizedBox(height: 60),
+                        SizedBox(height: 70),
 
                         // Login button
                         Container(
